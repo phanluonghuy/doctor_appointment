@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:doctor_appointment/utils/routes/routes_names.dart';
 import 'package:doctor_appointment/utils/utils.dart';
-import 'package:doctor_appointment/viewModel/home_view_model.dart';
-import 'package:doctor_appointment/viewModel/user_view_model.dart';
+import 'package:doctor_appointment/viewModel/home_viewmodel.dart';
+import 'package:doctor_appointment/viewModel/user_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 import '../data/response/status.dart';

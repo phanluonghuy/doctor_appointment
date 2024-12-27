@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:doctor_appointment/utils/routes/routes_names.dart';
-import 'package:doctor_appointment/viewModel/user_view_model.dart';
+import 'package:doctor_appointment/viewModel/user_viewmodel.dart';
+import 'package:go_router/go_router.dart';
 
 class SplashService {
   static void checkAuthentication(BuildContext context) async {
@@ -10,10 +11,10 @@ class SplashService {
 
     if (user!.token.toString() == "null" || user.token.toString() == "") {
       await Future.delayed(const Duration(seconds: 1));
-      Navigator.pushNamed(context, RouteNames.login);
+      context.go('/login');
     } else {
       await Future.delayed(const Duration(seconds: 1));
-      Navigator.pushNamed(context, RouteNames.home);
+      context.go('/home');
     }
   }
 }

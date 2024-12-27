@@ -1,10 +1,15 @@
 import "package:flutter/material.dart";
 import "package:doctor_appointment/utils/routes/routes_names.dart";
+import "package:flutter_svg/svg.dart";
+import "package:go_router/go_router.dart";
 import "package:provider/provider.dart";
 
-import "../res/widgets/round_button.dart";
+import "../res/texts/app_text.dart";
+import "../res/widgets/buttons/primaryButton.dart";
+import "../res/widgets/buttons/round_button.dart";
+import "../utils/regex.dart";
 import "../utils/utils.dart";
-import "../viewModel/auth_viewmodel.dart";
+import "../viewModel/signup_viewmodel.dart";
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -14,124 +19,179 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  final ValueNotifier<bool> _obsecureNotifier = ValueNotifier<bool>(false);
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-
+  final TextEditingController _nameController = TextEditingController();
   final FocusNode _emailFocus = FocusNode();
-  final FocusNode _passwordFocus = FocusNode();
+  final FocusNode _nameFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height * 1;
-    final authviewmodel = Provider.of<AuthViewModel>(context);
+    final signupviewmodel = Provider.of<SignUpViewModel>(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Sign up"),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-      ),
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: TextFormField(
+      body: SingleChildScrollView(
+        child: SafeArea(
+            child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: height * 0.08),
+              Text("Create Account", style: AppTextStyle.title),
+              SizedBox(height: height * 0.03),
+              Text(
+                  "Fill your information below or register \n with your social media",
+                  textAlign: TextAlign.center),
+              SizedBox(height: height * 0.05),
+              Align(alignment: Alignment.centerLeft, child: Text("Name")),
+              SizedBox(height: height * 0.01),
+              TextFormField(
+                controller: _nameController,
+                focusNode: _nameFocus,
+                keyboardType: TextInputType.emailAddress,
+                onFieldSubmitted: (value) {
+                  Utils.changeNodeFocus(context,
+                      current: _nameFocus, next: _emailFocus);
+                },
+                decoration: InputDecoration(
+                  hintText: "Enter your name",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+              SizedBox(height: height * 0.03),
+              Align(alignment: Alignment.centerLeft, child: Text("Email")),
+              SizedBox(height: height * 0.01),
+              TextFormField(
                 controller: _emailController,
                 focusNode: _emailFocus,
                 keyboardType: TextInputType.emailAddress,
                 onFieldSubmitted: (value) {
                   Utils.changeNodeFocus(context,
-                      current: _emailFocus, next: _passwordFocus);
+                      current: _emailFocus, next: null);
                 },
                 decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.email),
-                  label: const Text("Email"),
                   hintText: "Enter your email",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ValueListenableBuilder(
-                valueListenable: _obsecureNotifier,
-                builder: ((context, value, child) {
-                  return TextFormField(
-                    controller: _passwordController,
-                    focusNode: _passwordFocus,
-                    obscureText: _obsecureNotifier.value,
-                    obscuringCharacter: "*",
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.lock_outline),
-                      suffixIcon: _obsecureNotifier.value
-                          ? InkWell(
-                              onTap: () {
-                                _obsecureNotifier.value =
-                                    !_obsecureNotifier.value;
-                              },
-                              child: const Icon(Icons.visibility),
-                            )
-                          : InkWell(
-                              onTap: () {
-                                _obsecureNotifier.value =
-                                    !_obsecureNotifier.value;
-                              },
-                              child: const Icon(Icons.visibility_off),
-                            ),
-                      label: const Text("Password"),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                  );
-                }),
+              Row(
+                children: [
+                  Checkbox(
+                      value: signupviewmodel.termsAccepted,
+                      onChanged: (value) {
+                        signupviewmodel.setTermsAccepted(value ?? false);
+                      }),
+                  Expanded(child: Text("I agree to the terms and conditions"))
+                ],
               ),
-            ),
-            SizedBox(
-              height: height * 0.08,
-            ),
-            RoundButton(
-                title: "Login",
-                loading: authviewmodel.signupLoading,
-                onPress: () {
-                  _passwordFocus.unfocus();
+              SizedBox(height: height * 0.02),
+              PrimaryButton(
+                  text: "Sign Up",
+                  onPressed: () {
+                    if (_emailController.text.isEmpty) {
+                      Utils.flushBarErrorMessage(
+                          "Email must be provide", context);
+                      return;
+                    }
 
-                  if (_emailController.text.isEmpty ||
-                      _passwordController.text.isEmpty) {
-                    Utils.flushBarErrorMessage(
-                        "email or password must be provide", context);
-                  } else if (_passwordController.text.isEmpty) {
-                    Utils.flushBarErrorMessage("Password must be provide", context);
-                  } else if (_emailController.text.isEmpty) {
-                    Utils.flushBarErrorMessage("Email must be provide", context);
-                  } else {
-                    Map data = {
-                      "email": _emailController.text.toString(),
-                      "password": _passwordController.text.toString()
-                    };
-                    authviewmodel.apiSignUp(data, context);
-                    debugPrint("hit API");
-                  }
-                }),
-            SizedBox(
-              height: height * 0.02,
-            ),
-            InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, RouteNames.login);
-                },
-                child: const Text("Already have an account? Login Up!"))
-          ],
-        ),
+                    if (_nameController.text.isEmpty) {
+                      Utils.flushBarErrorMessage(
+                          "Name must be provide", context);
+                      return;
+                    }
+
+                    if (AppRegex.isValidEmail(_emailController.text) == false) {
+                      Utils.flushBarErrorMessage(
+                          "Email must be valid", context);
+                      return;
+                    }
+
+                    if (signupviewmodel.termsAccepted == false) {
+                      Utils.flushBarErrorMessage(
+                          "You must accept the terms and conditions", context);
+                      return;
+                    }
+                    signupviewmodel.setName(_nameController.text);
+                    signupviewmodel.setEmail(_emailController.text);
+                    // context.go('/otp');
+                    context.push('/otp');
+
+                  },
+                  context: context),
+              SizedBox(height: height * 0.02),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: Divider(
+                      height: 2,
+                    )),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      child: Text("Or sign up with"),
+                    ),
+                    Expanded(
+                        child: Divider(
+                      height: 2,
+                    ))
+                  ],
+                ),
+              ),
+              SizedBox(height: height * 0.02),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  InkWell(
+                    onTap: () {},
+                    child: SvgPicture.asset(
+                      'assets/icons/icons8-facebook.svg',
+                      height: 40,
+                      width: 40,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: SvgPicture.asset(
+                      'assets/icons/icons8-google.svg',
+                      height: 40,
+                      width: 40,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: SvgPicture.asset(
+                      'assets/icons/icons8-apple.svg',
+                      height: 40,
+                      width: 40,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: height * 0.02,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Already have an account ?"),
+                  TextButton(
+                    onPressed: () {
+                      // Navigator.pushNamed(context, RouteNames.login);
+                      context.go('/login');
+                    },
+                    child: Text("Sign in"),
+                  )
+                ],
+              )
+            ],
+          ),
+        )),
       ),
     );
   }
@@ -141,7 +201,5 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.dispose();
     _emailController.dispose();
     _emailFocus.dispose();
-    _passwordController.dispose();
-    _passwordFocus.dispose();
   }
 }

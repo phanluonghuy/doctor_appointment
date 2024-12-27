@@ -1,9 +1,12 @@
+import 'package:doctor_appointment/res/widgets/coloors.dart';
+import 'package:doctor_appointment/viewModel/signup_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:doctor_appointment/utils/routes/routes.dart';
 import 'package:doctor_appointment/utils/routes/routes_names.dart';
 import 'package:doctor_appointment/viewModel/auth_viewmodel.dart';
-import 'package:doctor_appointment/viewModel/home_view_model.dart';
-import 'package:doctor_appointment/viewModel/user_view_model.dart';
+import 'package:doctor_appointment/viewModel/home_viewmodel.dart';
+import 'package:doctor_appointment/viewModel/user_viewmodel.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -20,22 +23,22 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
         ChangeNotifierProvider(create: (_) => UserViewModel()),
-        ChangeNotifierProvider(create: (_) => HomeViewModel())
+        ChangeNotifierProvider(create: (_) => HomeViewModel()),
+        ChangeNotifierProvider(create: (_) => SignUpViewModel(),lazy: true),
       ],
       child: WillPopScope(
         onWillPop: () async {
           Navigator.pop(context);
           return true;
         },
-        child: MaterialApp(
-          title: 'Book Appointment',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
+          child: MaterialApp.router(
+            title: 'Book Appointment',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              textTheme: GoogleFonts.interTextTheme(),
+            ),
+            routerConfig: router, // Use the GoRouter instance
           ),
-          initialRoute: RouteNames.splashScreen,
-          onGenerateRoute: Routes.generateRoutes,
-        ),
       ),
     );
   }
