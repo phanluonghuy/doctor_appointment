@@ -21,6 +21,7 @@ class SignUpVerifyOTPScreen extends StatefulWidget {
 }
 
 class _SignUpVerifyOTPScreenState extends State<SignUpVerifyOTPScreen> {
+  String _otp = "";
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height * 1;
@@ -84,7 +85,7 @@ class _SignUpVerifyOTPScreenState extends State<SignUpVerifyOTPScreen> {
                   )
                 ],
                 onCompleted: (v) {
-                  debugPrint("Completed");
+                  _otp = v;
                 },
               ),
               SizedBox(height: height * 0.02),
@@ -109,7 +110,20 @@ class _SignUpVerifyOTPScreenState extends State<SignUpVerifyOTPScreen> {
                   text: "Verify",
                   loading: signupviewmodel.loading,
                   onPressed: () {
-                    signupviewmodel.apiVerifyOTP("data", context);
+                    print(_otp);
+
+                    if (_otp.length != 4) {
+                      Utils.flushBarErrorMessage(
+                          "OTP must be 4 characters", context);
+                      return;
+                    }
+                    final data = {
+                      "token" : signupviewmodel.token,
+                      "email" : signupviewmodel.email,
+                      "otp" : _otp
+                    };
+
+                    signupviewmodel.apiVerifyOTP(data, context);
                     // if (_emailController.text.isEmpty) {
                     //   Utils.flushBarErrorMessage(
                     //       "Email must be provide", context);

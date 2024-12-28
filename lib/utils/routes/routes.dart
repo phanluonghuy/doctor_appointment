@@ -44,32 +44,34 @@ import 'package:doctor_appointment/view/signup_screen.dart';
 import 'package:doctor_appointment/view/signup_verityOTP_screen.dart';
 import 'package:doctor_appointment/view/splash_screen.dart';
 
+import '../../view/signup_createPassword.dart';
+
 final GoRouter router = GoRouter(
+  // initialLocation: '/splash',
   initialLocation: '/splash',
   routes: [
     GoRoute(
       path: '/splash',
-      // name: RouteNames.splash,
       builder: (context, state) => const SplashScreen(),
     ),
     GoRoute(
       path: '/login',
-      // name: RouteNames.login,
       builder: (context, state) => const LoginScreen(),
     ),
     GoRoute(
       path: '/signup',
-      // name: RouteNames.signup,
       builder: (context, state) => const SignUpScreen(),
     ),
     GoRoute(
       path: '/otp',
-      // name: RouteNames.otpVerification,
       builder: (context, state) => const SignUpVerifyOTPScreen(),
     ),
     GoRoute(
+        path: '/createPassword',
+        builder: (context, state) => const SignUpCreatePasswordScreen()
+    ),
+    GoRoute(
       path: '/home',
-      // name: RouteNames.home,
       builder: (context, state) => const HomeScreen(),
     ),
   ],
@@ -79,4 +81,3 @@ final GoRouter router = GoRouter(
     ),
   ),
 );
-

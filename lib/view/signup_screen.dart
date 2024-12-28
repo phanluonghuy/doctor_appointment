@@ -92,6 +92,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               SizedBox(height: height * 0.02),
               PrimaryButton(
                   text: "Sign Up",
+                  loading: signupviewmodel.loading,
                   onPressed: () {
                     if (_emailController.text.isEmpty) {
                       Utils.flushBarErrorMessage(
@@ -118,8 +119,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     }
                     signupviewmodel.setName(_nameController.text);
                     signupviewmodel.setEmail(_emailController.text);
+                    final data = {
+                      "email": _emailController.text,
+                    };
+                    signupviewmodel.apiSendOTP(data, context);
                     // context.go('/otp');
-                    context.push('/otp');
+                    // context.push('/otp');
 
                   },
                   context: context),

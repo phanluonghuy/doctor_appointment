@@ -12,12 +12,20 @@ class SignUpViewModel with ChangeNotifier {
   bool _termsAccepted = false;
   String email = "";
   String name = "";
+  String token = "";
+  String password = "";
+  String phoneNumber = "";
+  bool _isFemale = false;
 
   get loading => _isLoading;
   get signupLoading => _signupLoading;
   get termsAccepted => _termsAccepted;
   get getEmail => email;
   get getName => name;
+  get getToken => token;
+  get getPassword => password;
+  get getPhoneNumber => phoneNumber;
+  get getIsFemale => _isFemale;
 
 
   void setLoading(bool value) {
@@ -60,17 +68,38 @@ class SignUpViewModel with ChangeNotifier {
     });
   }
 
+  Future<void> apiSendOTP(dynamic data, BuildContext context) async {
+    setLoading(true);
+    try {
+      final value = await _auth.sendOTP(data);
+      // print(value);
+      Utils.flushBarSuccessMessage(value.description, context);
+      token = value.data;
+      context.push('/otp');
+    } catch (error) {
+      Utils.flushBarErrorMessage(error.toString(), context);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   Future<void> apiVerifyOTP(dynamic data, BuildContext context) async {
     setLoading(true);
-    await Future.delayed(const Duration(seconds: 2));
-    setLoading(false);
-    // _auth.verifyOTP(data).then((value) {
-    //   Utils.flushBarErrorMessage("OTP Verified Successfully", context);
-    //   context.go('/login');
-    //   setLoading(false);
-    // }).onError((error, stackTrace) {
-    //   Utils.flushBarErrorMessage(error.toString(), context);
-    //   setLoading(false);
-    // });
+    try {
+      final value = await _auth.verifyOTP(data);
+      // print(value);
+      if (value.acknowledgement) {
+        Utils.flushBarSuccessMessage(value.description, context);
+        context.push('/createPassword');
+      } else {
+        Utils.flushBarErrorMessage(value.description, context);
+      }
+
+    } catch (error) {
+      Utils.flushBarErrorMessage(error.toString(), context);
+    } finally {
+      setLoading(false);
+    }
   }
+
 }

@@ -37,10 +37,9 @@ class AuthViewModel with ChangeNotifier {
     setLoginLoading(true);
     _auth.apiLogin(data).then((value) {
       setLoginLoading(false);
-      print(value.toString());
-
+      // print(value.toString());
       final userPreference = Provider.of<UserViewModel>(context, listen: false);
-      userPreference.saveUser(UserModel(token: value['token'].toString()));
+      userPreference.saveUser(UserModel(token: value.data));
 
       Utils.flushBarErrorMessage("Login Successfully", context);
 
