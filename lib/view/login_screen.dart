@@ -2,15 +2,12 @@ import 'package:doctor_appointment/res/texts/app_text.dart';
 import 'package:doctor_appointment/res/widgets/buttons/primaryButton.dart';
 import 'package:doctor_appointment/utils/regex.dart';
 import 'package:flutter/material.dart';
-import 'package:doctor_appointment/res/widgets/buttons/round_button.dart';
-import 'package:doctor_appointment/utils/routes/routes_names.dart';
 import 'package:doctor_appointment/utils/utils.dart';
 import 'package:doctor_appointment/viewModel/auth_viewmodel.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../res/widgets/coloors.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -196,7 +193,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   TextButton(
                     onPressed: () {
                        // Navigator.pushNamed(context, RouteNames.signupScreen);
-                      context.go('/signup');
+                      context.push('/signup');
                     },
                     child: Text("Sign up"),
                   )

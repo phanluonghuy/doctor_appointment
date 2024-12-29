@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:doctor_appointment/models/user_model.dart';
 import 'package:doctor_appointment/repository/auth_repository.dart';
-import 'package:doctor_appointment/utils/routes/routes_names.dart';
 import 'package:doctor_appointment/utils/utils.dart';
 import 'package:doctor_appointment/viewModel/user_viewmodel.dart';
 import 'package:go_router/go_router.dart';
@@ -37,7 +36,11 @@ class AuthViewModel with ChangeNotifier {
     setLoginLoading(true);
     _auth.apiLogin(data).then((value) {
       setLoginLoading(false);
-      // print(value.toString());
+      if (value.acknowledgement == false) {
+        Utils.flushBarErrorMessage(value.description, context);
+        return;
+      }
+
       final userPreference = Provider.of<UserViewModel>(context, listen: false);
       userPreference.saveUser(UserModel(token: value.data));
 

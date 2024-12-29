@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 
 import '../repository/auth_repository.dart';
-import '../utils/routes/routes_names.dart';
 import '../utils/utils.dart';
 
 class SignUpViewModel with ChangeNotifier {
@@ -15,6 +14,8 @@ class SignUpViewModel with ChangeNotifier {
   String token = "";
   String password = "";
   String phoneNumber = "";
+  String address = "";
+  DateTime dob = DateTime.now();
   bool _isFemale = false;
 
   get loading => _isLoading;
@@ -25,7 +26,9 @@ class SignUpViewModel with ChangeNotifier {
   get getToken => token;
   get getPassword => password;
   get getPhoneNumber => phoneNumber;
+  get getAddress => address;
   get getIsFemale => _isFemale;
+  get getDob => dob;
 
 
   void setLoading(bool value) {
@@ -56,11 +59,18 @@ class SignUpViewModel with ChangeNotifier {
 
   Future<void> apiSignUp(dynamic data, BuildContext context) async {
     setSignUpLoading(true);
-    _auth.signUp(data).then((value) {
-      Utils.flushBarErrorMessage("Sign Up Successfully", context);
-
+    _auth.signUp(data).then((value) async {
+      if (value.acknowledgement) {
+        Utils.flushBarSuccessMessage(value.description, context);
+        Future.delayed(const Duration(seconds: 2), () {
+          context.push('/login');
+        });
+      } else {
+        Utils.flushBarErrorMessage(value.description, context);
+      }
+      // Utils.flushBarErrorMessage(value.description, context);
       // Navigator.pushNamed(context, RouteNames.home);
-      context.go('/home');
+      // context.push('/login');
       setSignUpLoading(false);
     }).onError((error, stackTrace) {
       Utils.flushBarErrorMessage(error.toString(), context);

@@ -16,7 +16,7 @@ class AuthRepository {
   Future<dynamic> signUp(dynamic data) async {
     try {
       final response =
-          await _network.getPostApiResponse(AppUrls.sendOTP, data);
+          await _network.getPostApiResponse(AppUrls.registerEndPoint, data);
       return response;
     } catch (e) {
       rethrow; //Big Brain

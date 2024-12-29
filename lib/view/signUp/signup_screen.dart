@@ -1,15 +1,13 @@
 import "package:flutter/material.dart";
-import "package:doctor_appointment/utils/routes/routes_names.dart";
 import "package:flutter_svg/svg.dart";
 import "package:go_router/go_router.dart";
 import "package:provider/provider.dart";
 
-import "../res/texts/app_text.dart";
-import "../res/widgets/buttons/primaryButton.dart";
-import "../res/widgets/buttons/round_button.dart";
-import "../utils/regex.dart";
-import "../utils/utils.dart";
-import "../viewModel/signup_viewmodel.dart";
+import "../../res/texts/app_text.dart";
+import "../../res/widgets/buttons/primaryButton.dart";
+import "../../utils/regex.dart";
+import "../../utils/utils.dart";
+import "../../viewModel/signup_viewmodel.dart";
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -188,7 +186,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   TextButton(
                     onPressed: () {
                       // Navigator.pushNamed(context, RouteNames.login);
-                      context.go('/login');
+                      context.push('/login');
                     },
                     child: Text("Sign in"),
                   )

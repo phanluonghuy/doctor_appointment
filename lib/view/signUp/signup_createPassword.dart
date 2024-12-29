@@ -1,17 +1,14 @@
 import "package:doctor_appointment/res/widgets/coloors.dart";
 import "package:flutter/material.dart";
-import "package:doctor_appointment/utils/routes/routes_names.dart";
-import "package:flutter_svg/svg.dart";
-import "package:go_router/go_router.dart";
 import "package:phone_form_field/phone_form_field.dart";
 import "package:provider/provider.dart";
 
-import "../res/texts/app_text.dart";
-import "../res/widgets/buttons/primaryButton.dart";
-import "../res/widgets/buttons/round_button.dart";
-import "../utils/regex.dart";
-import "../utils/utils.dart";
-import "../viewModel/signup_viewmodel.dart";
+import "../../res/texts/app_text.dart";
+import "../../res/widgets/buttons/primaryButton.dart";
+import "../../res/widgets/datePicker.dart";
+import "../../utils/regex.dart";
+import "../../utils/utils.dart";
+import "../../viewModel/signup_viewmodel.dart";
 
 class SignUpCreatePasswordScreen extends StatefulWidget {
   const SignUpCreatePasswordScreen({super.key});
@@ -27,6 +24,7 @@ class _SignUpCreatePasswordScreenState extends State<SignUpCreatePasswordScreen>
 
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
 
   String _phoneNumber = '';
   late bool _isFemale;
@@ -35,6 +33,7 @@ class _SignUpCreatePasswordScreenState extends State<SignUpCreatePasswordScreen>
   final FocusNode _confirmPasswordFocus = FocusNode();
   final FocusNode _phoneFocus = FocusNode();
   final FocusNode _genderFocus = FocusNode();
+  final FocusNode _addressFocus = FocusNode();
   final bool mobileOnly = true;
 
   @override
@@ -66,37 +65,37 @@ class _SignUpCreatePasswordScreenState extends State<SignUpCreatePasswordScreen>
                       "Don't worry, only you can see your personal \n data. No one else will be able to see it.",
                       textAlign: TextAlign.center),
                   SizedBox(height: height * 0.05),
-                  Center(child: Stack(children: [
-                    CircleAvatar(
-                      radius: height * 0.08,
-                      backgroundColor: Colors.grey.shade300,
-                      child: Icon(Icons.person, size: height * 0.08,color: Colors.grey.shade800),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: Container(
-                        width: height * 0.04, // Diameter of the CircleAvatar + border
-                        height: height * 0.04,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.white, // Border color
-                            width: 2.0, // Border width
-                          ),
-                        ),
-                        child: CircleAvatar(
-                          radius: height * 0.03,
-                          backgroundColor: AppColors.primaryColor,
-                          child: Icon(
-                            Icons.edit_rounded,
-                            size: height * 0.02,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    )
-                  ],)),
+                  // Center(child: Stack(children: [
+                  //   CircleAvatar(
+                  //     radius: height * 0.08,
+                  //     backgroundColor: Colors.grey.shade300,
+                  //     child: Icon(Icons.person, size: height * 0.08,color: Colors.grey.shade800),
+                  //   ),
+                  //   Positioned(
+                  //     bottom: 0,
+                  //     right: 0,
+                  //     child: Container(
+                  //       width: height * 0.04, // Diameter of the CircleAvatar + border
+                  //       height: height * 0.04,
+                  //       decoration: BoxDecoration(
+                  //         shape: BoxShape.circle,
+                  //         border: Border.all(
+                  //           color: Colors.white, // Border color
+                  //           width: 2.0, // Border width
+                  //         ),
+                  //       ),
+                  //       child: CircleAvatar(
+                  //         radius: height * 0.03,
+                  //         backgroundColor: AppColors.primaryColor,
+                  //         child: Icon(
+                  //           Icons.edit_rounded,
+                  //           size: height * 0.02,
+                  //           color: Colors.white,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   )
+                  // ],)),
                   Align(alignment: Alignment.centerLeft, child: Text("Password")),
                   SizedBox(height: height * 0.01),
                   ValueListenableBuilder<bool>(
@@ -158,7 +157,9 @@ class _SignUpCreatePasswordScreenState extends State<SignUpCreatePasswordScreen>
                       );
                     },
                   ),
-                  SizedBox(height: height * 0.03),
+                  SizedBox(height: height * 0.02),
+                  Align(alignment: Alignment.centerLeft, child: Text("Phone Number")),
+                  SizedBox(height: height * 0.01),
                   PhoneFormField(
                   initialValue: PhoneNumber.parse('+84'), // or use the controller
                   validator: _getValidator(context),
@@ -181,7 +182,6 @@ class _SignUpCreatePasswordScreenState extends State<SignUpCreatePasswordScreen>
                   ),
                   textAlignVertical: TextAlignVertical.center,
                   decoration: InputDecoration(
-                    labelText: 'Phone number',
                     // hintText: 'EYour number',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -212,16 +212,52 @@ class _SignUpCreatePasswordScreenState extends State<SignUpCreatePasswordScreen>
                       } else {
                         _isFemale = false;
                       }
+                      Utils.changeNodeFocus(context,
+                          current: _genderFocus, next: _addressFocus);
+                    },
+                  ),
+                  SizedBox(height: height * 0.02),
+                  Align(alignment: Alignment.centerLeft, child: Text("Address")),
+                  SizedBox(height: height * 0.01),
+                  TextFormField(
+                    controller: _addressController,
+                    focusNode: _addressFocus,
+                    keyboardType: TextInputType.streetAddress,
+                    onFieldSubmitted: (value) {
+                      Utils.changeNodeFocus(context,
+                          current: _addressFocus, next: null);
+                      signupviewmodel.address = _addressController.text;
+                    },
+                    decoration: InputDecoration(
+                      hintText: "Enter your address",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: height * 0.02),
+                  Align(alignment: Alignment.centerLeft, child: Text("Your Date of Birth")),
+                  SizedBox(height: height * 0.01),
+                  DatePicker(
+                    initialDate: DateTime.now(),
+                    onDateChanged: (DateTime selectedDate) {
+                      signupviewmodel.dob = selectedDate;
                     },
                   ),
                   SizedBox(height: height * 0.02),
                   PrimaryButton(
                       text: "Complete Profile",
-                      loading: signupviewmodel.loading,
+                      loading: signupviewmodel.signupLoading,
                       onPressed: () {
                         if (_passwordController.text.isEmpty) {
                           Utils.flushBarErrorMessage(
                               "Password must be provide", context);
+                          return;
+                        }
+
+                        if (AppRegex.isValidPassword(_passwordController.text) == false) {
+                          Utils.flushBarErrorMessage(
+                              "Password has 1 Lower, 1 Upper, 1 Number, 1 Symbols", context);
                           return;
                         }
 
@@ -230,6 +266,7 @@ class _SignUpCreatePasswordScreenState extends State<SignUpCreatePasswordScreen>
                               "Password must be provide", context);
                           return;
                         }
+
 
                         if (_passwordController.text != _confirmPasswordController.text) {
                           Utils.flushBarErrorMessage(
@@ -249,8 +286,23 @@ class _SignUpCreatePasswordScreenState extends State<SignUpCreatePasswordScreen>
                           return;
                         }
 
-                        print(signupviewmodel.email + signupviewmodel.name + signupviewmodel.password + signupviewmodel.phoneNumber + signupviewmodel.getIsFemale.toString());
+                        if (_addressController.text.isEmpty) {
+                          Utils.flushBarErrorMessage(
+                              "Address must be provide", context);
+                          return;
+                        }
 
+                        Map data = {
+                          "email": signupviewmodel.email,
+                          "name": signupviewmodel.name,
+                          "password": _passwordController.text,
+                          "phone": _phoneNumber,
+                          "dateOfBirth" : signupviewmodel.dob.toString(),
+                          "isFemale" : _isFemale,
+                        };
+
+                        //print(signupviewmodel.email + signupviewmodel.name + signupviewmodel.password + signupviewmodel.phoneNumber + signupviewmodel.getIsFemale.toString() + signupviewmodel.address);
+                        signupviewmodel.apiSignUp(data, context);
 
                         //
                         // if (AppRegex.isValidEmail(_passwordController.text) == false) {

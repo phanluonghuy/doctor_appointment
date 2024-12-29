@@ -8,7 +8,9 @@ class AppRegex {
     return phoneRegex.hasMatch(phone);
   }
   static bool isValidPassword(String password) {
-    final passwordRegex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$');
-    return passwordRegex.hasMatch(password);
+    final RegExp passwordRegExp = RegExp(
+      r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,20}$',
+    );
+    return passwordRegExp.hasMatch(password);
   }
 }

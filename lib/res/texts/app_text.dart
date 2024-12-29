@@ -16,6 +16,10 @@ class AppTextStyle {
     fontSize: 16,
   );
 
+  static final TextStyle caption = TextStyle(
+    fontSize: 14,
+  );
+
   static final TextStyle button = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.bold,
