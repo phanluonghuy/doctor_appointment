@@ -24,20 +24,14 @@ class MyApp extends StatelessWidget {
         // ChangeNotifierProvider(create: (_) => HomeViewModel()),
         ChangeNotifierProvider(create: (_) => SignUpViewModel(),lazy: true),
       ],
-      child: WillPopScope(
-        onWillPop: () async {
-          Navigator.pop(context);
-          return true;
-        },
-          child: MaterialApp.router(
-            title: 'Book Appointment',
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              colorScheme:  ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
-              textTheme: GoogleFonts.interTextTheme(),
-            ),
-            routerConfig: router, // Use the GoRouter instance
-          ),
+      child: MaterialApp.router(
+        title: 'Book Appointment',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
+          textTheme: GoogleFonts.interTextTheme(),
+        ),
+        routerConfig: router, // Use the GoRouter instance
       ),
     );
   }

@@ -7,6 +7,7 @@ class AuthRepository {
     try {
       final response = await _network.getPostApiResponse(AppUrls.loginEndPoint, data);
       return response;
+
     } catch (e) {
       rethrow; //Big Brain
     }

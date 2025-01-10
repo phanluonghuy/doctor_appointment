@@ -31,7 +31,6 @@ class NetworkApiServices extends BaseApiServices {
           .timeout(const Duration(seconds: 10));
       // print(jsonEncode(data));
       responsejson = responseJson(response);
-      print(responsejson);
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         // Building ApiResponse based on the parsed JSON

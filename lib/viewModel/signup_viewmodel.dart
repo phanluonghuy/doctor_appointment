@@ -60,13 +60,13 @@ class SignUpViewModel with ChangeNotifier {
   Future<void> apiSignUp(dynamic data, BuildContext context) async {
     setSignUpLoading(true);
     _auth.signUp(data).then((value) async {
-      if (value.acknowledgement) {
-        Utils.flushBarSuccessMessage(value.description, context);
+      if (value.acknowledgement ?? false) {
+        Utils.flushBarSuccessMessage(value.description ?? "", context);
         Future.delayed(const Duration(seconds: 2), () {
           context.push('/login');
         });
       } else {
-        Utils.flushBarErrorMessage(value.description, context);
+        Utils.flushBarErrorMessage(value.description ?? "", context);
       }
       // Utils.flushBarErrorMessage(value.description, context);
       // Navigator.pushNamed(context, RouteNames.home);
@@ -83,7 +83,7 @@ class SignUpViewModel with ChangeNotifier {
     try {
       final value = await _auth.sendOTP(data);
       // print(value);
-      Utils.flushBarSuccessMessage(value.description, context);
+      Utils.flushBarSuccessMessage(value.description ?? "", context);
       token = value.data;
       context.push('/otp');
     } catch (error) {
@@ -98,11 +98,11 @@ class SignUpViewModel with ChangeNotifier {
     try {
       final value = await _auth.verifyOTP(data);
       // print(value);
-      if (value.acknowledgement) {
-        Utils.flushBarSuccessMessage(value.description, context);
+      if (value.acknowledgement ?? false) {
+        Utils.flushBarSuccessMessage(value.description ?? "", context);
         context.push('/createPassword');
       } else {
-        Utils.flushBarErrorMessage(value.description, context);
+        Utils.flushBarErrorMessage(value.description?? "", context);
       }
 
     } catch (error) {
