@@ -22,6 +22,28 @@ class AuthRepository {
       rethrow; //Big Brain
     }
   }
+
+  Future<dynamic> sendOTP(dynamic data) async {
+    try {
+      final response =
+          await _network.getPostApiResponse(AppUrls.sendOTP, data);
+      return response;
+    } catch (e) {
+      rethrow; //Big Brain
+    }
+  }
+
+
+  Future<dynamic> verifyOTP(dynamic data) async {
+    try {
+      final response =
+      await _network.getPostApiResponse(AppUrls.verifyOTP, data);
+      return response;
+    } catch (e) {
+      rethrow; //Big Brain
+    }
+  }
+
 }
 
 

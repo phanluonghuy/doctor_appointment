@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:doctor_appointment/models/user_model.dart';
 import 'package:doctor_appointment/repository/auth_repository.dart';
-import 'package:doctor_appointment/utils/routes/routes_names.dart';
 import 'package:doctor_appointment/utils/utils.dart';
-import 'package:doctor_appointment/viewModel/user_view_model.dart';
+import 'package:doctor_appointment/viewModel/user_viewmodel.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class AuthViewModel with ChangeNotifier {
@@ -11,9 +11,11 @@ class AuthViewModel with ChangeNotifier {
 
   bool _loginLoading = false;
   bool _signupLoading = false;
+  bool _termsAccepted = false;
 
   get loading => _loginLoading;
   get signupLoading => _signupLoading;
+  get termsAccepted => _termsAccepted;
 
   void setLoginLoading(bool value) {
     _loginLoading = value;
@@ -25,18 +27,26 @@ class AuthViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  void setTermsAccepted(bool value) {
+    _termsAccepted = value;
+    notifyListeners();
+  }
+
   Future<void> apilogin(dynamic data, BuildContext context) async {
     setLoginLoading(true);
     _auth.apiLogin(data).then((value) {
       setLoginLoading(false);
-      print(value.toString());
+      if (value.acknowledgement == false) {
+        Utils.flushBarErrorMessage(value.description, context);
+        return;
+      }
 
       final userPreference = Provider.of<UserViewModel>(context, listen: false);
-      userPreference.saveUser(UserModel(token: value['token'].toString()));
+      userPreference.saveUser(UserModel(token: value.data));
 
       Utils.flushBarErrorMessage("Login Successfully", context);
 
-      Navigator.pushNamed(context, RouteNames.home);
+      context.go('/home');
     }).onError((error, stackTrace) {
       Utils.flushBarErrorMessage(error.toString(), context);
       setLoginLoading(false);
@@ -48,7 +58,8 @@ class AuthViewModel with ChangeNotifier {
     _auth.signUp(data).then((value) {
       Utils.flushBarErrorMessage("Sign Up Successfully", context);
 
-      Navigator.pushNamed(context, RouteNames.home);
+      // Navigator.pushNamed(context, RouteNames.home);
+      context.go('/home');
       setSignUpLoading(false);
     }).onError((error, stackTrace) {
       Utils.flushBarErrorMessage(error.toString(), context);

@@ -3,14 +3,14 @@ import 'package:doctor_appointment/viewModel/user_viewmodel.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class BookingScreen extends StatefulWidget {
+  const BookingScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<BookingScreen> createState() => _BookingScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _BookingScreenState extends State<BookingScreen> {
 
   @override
   void initState() {
@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Home Screen"),
+        title: const Text("Booking Screen"),
         centerTitle: true,
         automaticallyImplyLeading: false,
         actions: [
