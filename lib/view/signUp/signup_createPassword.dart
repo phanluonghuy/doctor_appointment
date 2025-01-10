@@ -299,6 +299,7 @@ class _SignUpCreatePasswordScreenState extends State<SignUpCreatePasswordScreen>
                           "phone": _phoneNumber,
                           "dateOfBirth" : signupviewmodel.dob.toString(),
                           "isFemale" : _isFemale,
+                          "address" : _addressController.text
                         };
 
                         //print(signupviewmodel.email + signupviewmodel.name + signupviewmodel.password + signupviewmodel.phoneNumber + signupviewmodel.getIsFemale.toString() + signupviewmodel.address);

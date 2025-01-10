@@ -4,6 +4,7 @@ class AppUrls {
   static const registerEndPoint = "$baseUrl/user/sign-up";
   static const sendOTP = "$baseUrl/user/getOTP";
   static const verifyOTP = "$baseUrl/user/verifyOTP";
+  static const getMe= "$baseUrl/user/me";
 
   static var moviesBaseUrl =
       'https://dea91516-1da3-444b-ad94-c6d0c4dfab81.mock.pstmn.io/';

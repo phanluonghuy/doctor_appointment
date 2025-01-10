@@ -11,8 +11,8 @@ class User {
   final DateTime dateOfBirth;
   final String status;
   final String phone;
-  final String address;
-  final String avatar;
+  final String? address;
+  final String? avatar;
   final DateTime createdAt;
   final DateTime updatedAt;
 
