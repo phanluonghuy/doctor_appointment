@@ -17,12 +17,6 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
-  Future<void> initState() async {
-    // TODO: implement initState
-    super.initState();
-    // SplashService.checkAuthentication(context);
-  }
-  @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height * 1;
     return Scaffold(

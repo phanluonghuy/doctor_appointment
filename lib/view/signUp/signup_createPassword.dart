@@ -273,7 +273,7 @@ class _SignUpCreatePasswordScreenState extends State<SignUpCreatePasswordScreen>
                               "Password must be match", context);
                           return;
                         }
-                        print(_phoneNumber);
+
                         if (AppRegex.isValidPhone(_phoneNumber) == false) {
                           Utils.flushBarErrorMessage(
                               "Phone number must be valid", context);

@@ -6,9 +6,9 @@ class SplashService {
   static Future<void> checkAuthentication(BuildContext context) async {
     final userViewModel = UserViewModel();
 
-    final user = await userViewModel.getUser();
+    final token = await userViewModel.getToken();
 
-    if (user!.token.toString() == "null" || user.token.toString() == "") {
+    if (token == "null" || token == "") {
       context.go('/welcome');
     } else {
       context.go('/navigationMenu');

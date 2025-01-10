@@ -1,5 +1,5 @@
 class AppUrls {
-  static const baseUrl = "http://192.168.8.129:8080/api";
+  static const baseUrl = "http://192.168.10.254:8080/api";
   static const loginEndPoint = "$baseUrl/user/sign-in";
   static const registerEndPoint = "$baseUrl/user/sign-up";
   static const sendOTP = "$baseUrl/user/getOTP";
