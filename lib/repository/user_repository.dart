@@ -13,4 +13,20 @@ class UserRepository {
       rethrow; //Big Brain
     }
   }
+  Future<ApiResponse> updateProfile(Map<String, dynamic> data) async {
+    try {
+      final response = await _network.getPostApiResponse(AppUrls.updateProfile, data,isTokenRequired: true);
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+  Future<ApiResponse> changePassword(Map<String, dynamic> data) async {
+    try {
+      final response = await _network.getPostApiResponse(AppUrls.changePassword, data,isTokenRequired: true);
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

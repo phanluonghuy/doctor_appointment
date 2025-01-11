@@ -3,16 +3,16 @@ import 'dart:convert';
 
 class User {
   final String id;
-  final String email;
-  final String password;
-  final String role;
-  final String name;
-  final bool gender;
-  final DateTime dateOfBirth;
-  final String status;
-  final String phone;
-  final String? address;
-  final String? avatar;
+  String email;
+  String password;
+  String role;
+  String name;
+  bool gender;
+  DateTime dateOfBirth;
+  String status;
+  String phone;
+  String? address;
+  String? avatar;
   final DateTime createdAt;
   final DateTime updatedAt;
 

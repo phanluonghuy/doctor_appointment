@@ -45,7 +45,7 @@ class AuthViewModel with ChangeNotifier {
       userPreference.saveUser(value.data ?? "");
 
       Utils.flushBarErrorMessage("Login Successfully", context);
-
+      context.read<UserViewModel>().getUserProfile();
       context.go('/navigationMenu');
     }).onError((error, stackTrace) {
       Utils.flushBarErrorMessage(error.toString(), context);

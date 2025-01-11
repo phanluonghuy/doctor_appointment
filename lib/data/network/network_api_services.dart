@@ -65,12 +65,27 @@ class NetworkApiServices extends BaseApiServices {
   }
 
   @override
-  Future getPostApiResponse(String url, dynamic data) async {
+  Future getPostApiResponse(String url, dynamic data,{bool isTokenRequired = false} ) async {
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',  // Optional: Define content type
+    };
+    if (isTokenRequired) {
+      final SharedPreferences sp = await SharedPreferences.getInstance();
+      final String? token = sp.getString("token");
+      if (token == "null" || token == "") {
+        throw Exception("Token is not available");
+      } else {
+        headers = {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',  // Optional: Define content type
+        };
+      }
+    }
     dynamic responsejson;
     try {
       final response = await http
           .post(Uri.parse(url), body: jsonEncode(data),
-              headers: {"Content-Type": "application/json"})
+              headers: headers)
           .timeout(const Duration(seconds: 10));
       // print(jsonEncode(data));
       responsejson = responseJson(response);

@@ -10,10 +10,13 @@ import 'package:doctor_appointment/view/login_screen.dart';
 import 'package:doctor_appointment/view/signUp/signup_screen.dart';
 import 'package:doctor_appointment/view/splash_screen.dart';
 import 'package:go_router/go_router.dart';
-import '../../res/navigations/navigationMenu.dart';
-import '../../view/signUp/signup_createPassword.dart';
-import '../../view/welcome_screen.dart';
-import '../../viewModel/user_viewmodel.dart';
+import '../res/navigations/navigationMenu.dart';
+import '../view/changePassword_screen.dart';
+import '../view/editProfile_screen.dart';
+import '../view/settings_screen.dart';
+import '../view/signUp/signup_createPassword.dart';
+import '../view/welcome_screen.dart';
+import '../viewModel/user_viewmodel.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: '/splash',
@@ -68,6 +71,15 @@ final GoRouter router = GoRouter(
     GoRoute(
         path: '/profile',
         builder: (context, state) => const ProfileScreen()
+    ),
+    GoRoute(path: '/editProfile',
+        builder: (context, state) => const EditProfileScreen()
+    ),
+    GoRoute(path: '/settings',
+        builder: (context, state) => const SettingScreen()
+    ),
+    GoRoute(path: '/changePassword',
+        builder: (context, state) => const ChangePasswordScreen()
     ),
   ],
   errorBuilder: (context, state) => const Scaffold(

@@ -1,7 +1,7 @@
 import 'package:doctor_appointment/res/widgets/coloors.dart';
 import 'package:doctor_appointment/viewModel/signup_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:doctor_appointment/utils/routes/routes.dart';
+import 'package:doctor_appointment/utils/routes.dart';
 import 'package:doctor_appointment/viewModel/auth_viewmodel.dart';
 import 'package:doctor_appointment/viewModel/user_viewmodel.dart';
 import 'package:google_fonts/google_fonts.dart';
