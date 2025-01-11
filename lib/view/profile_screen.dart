@@ -1,3 +1,4 @@
+import 'package:doctor_appointment/res/widgets/profile_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:doctor_appointment/viewModel/user_viewmodel.dart';
 import 'package:flutter_svg/svg.dart';
@@ -29,21 +30,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title: const Text("Profile"),
         centerTitle: true,
         automaticallyImplyLeading: false,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 18),
-          child: CustomBackButton(
-            onPressed: () {
-              Provider.of<NavigationProvider>(context, listen: false).setIndex(0); // This will navigate to the 'Bookings' screen
-            },
-          ),
-        ),
-        leadingWidth: width*0.2,
+        // leading: Padding(
+        //   padding: const EdgeInsets.only(left: 18),
+        //   child: CustomBackButton(
+        //     onPressed: () {
+        //       Provider.of<NavigationProvider>(context, listen: false).setIndex(0); // This will navigate to the 'Bookings' screen
+        //     },
+        //   ),
+        // ),
+        // leadingWidth: width*0.2,
 
       ),
       body: SingleChildScrollView(
         child: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -83,8 +84,60 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     )
                   ],)),
-                  SizedBox(height: height * 0.03),
-                  Text(userViewModel.user?.name ?? "User", style: AppTextStyle.title),
+                  SizedBox(height: height * 0.02),
+                  Text(userViewModel.user?.name ?? "User", style: AppTextStyle.subtitle),
+                  SizedBox(height: height * 0.02),
+                  ProfileTab(
+                    onPressed: () {
+                    },
+                    iconPath: 'assets/buttons/icons8-person.svg',
+                    title: "Your Profile",
+                  ),
+                  Divider(height: 5,indent: 20,endIndent: 20,thickness: 0.5,),
+                  ProfileTab(
+                    onPressed: () {
+                    },
+                    iconPath: 'assets/buttons/icons8-card.svg',
+                    title: "Payment Methods",
+                  ),
+                  Divider(height: 5,indent: 20,endIndent: 20,thickness: 0.5,),
+                  ProfileTab(
+                    onPressed: () {
+                    },
+                    iconPath: 'assets/buttons/icons8-love.svg',
+                    title: "Favourites",
+                  ),
+                  Divider(height: 5,indent: 20,endIndent: 20,thickness: 0.5,),
+                  ProfileTab(
+                    onPressed: () {
+                    },
+                    iconPath: 'assets/buttons/icons8-setting.svg',
+                    title: "Settings",
+                  ),
+                  Divider(height: 5,indent: 20,endIndent: 20,thickness: 0.5,),
+                  ProfileTab(
+                    onPressed: () {
+                    },
+                    iconPath: 'assets/buttons/icons8-help.svg',
+                    title: "Help & Support",
+                  ),
+                  Divider(height: 5,indent: 20,endIndent: 20,thickness: 0.5,),
+                  ProfileTab(
+                    onPressed: () {
+                    },
+                    iconPath: 'assets/buttons/icons8-lock.svg',
+                    title: "Privacy Policy",
+                  ),
+                  Divider(height: 5,indent: 20,endIndent: 20,thickness: 0.5,),
+                  ProfileTab(
+                    onPressed: () {
+                      Provider.of<UserViewModel>(context,listen: false).removeUser().then((value) {
+                        context.go('/login');
+                      });
+                    },
+                    iconPath: 'assets/buttons/icons8-log-out.svg',
+                    title: "Logout",
+                  ),
                 ],
               ),
             )),
