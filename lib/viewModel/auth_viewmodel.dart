@@ -36,19 +36,20 @@ class AuthViewModel with ChangeNotifier {
     setLoginLoading(true);
     _auth.apiLogin(data).then((value) {
       setLoginLoading(false);
+      print(value.toString());
       if (value.acknowledgement == false) {
-        Utils.flushBarErrorMessage(value.description, context);
+        Utils.flushBarErrorMessage(value.description ?? "", context);
         return;
       }
-
       final userPreference = Provider.of<UserViewModel>(context, listen: false);
-      userPreference.saveUser(UserModel(token: value.data));
+      userPreference.saveUser(value.token ?? "");
 
       Utils.flushBarErrorMessage("Login Successfully", context);
 
-      context.go('/home');
+      context.go('/navigationMenu');
     }).onError((error, stackTrace) {
       Utils.flushBarErrorMessage(error.toString(), context);
+      print(error.toString());
       setLoginLoading(false);
     });
   }
