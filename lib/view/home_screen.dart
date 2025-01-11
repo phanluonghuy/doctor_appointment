@@ -1,3 +1,5 @@
+import 'package:doctor_appointment/viewModel/auth_viewmodel.dart';
+import 'package:doctor_appointment/viewModel/signup_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:doctor_appointment/viewModel/user_viewmodel.dart';
 import 'package:go_router/go_router.dart';
@@ -16,7 +18,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     final preferences = Provider.of<UserViewModel>(context);
