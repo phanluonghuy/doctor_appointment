@@ -46,6 +46,9 @@ dependencies:
   pin_code_fields: ^8.0.1
   phone_form_field: ^10.0.2
   persistent_bottom_nav_bar: ^6.2.1
+  image_picker: ^1.1.2
+  http_parser: ^4.1.2
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:

@@ -12,7 +12,7 @@ class User {
   String status;
   String phone;
   String? address;
-  String? avatar;
+  Avatar? avatar;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -45,7 +45,7 @@ class User {
       status: json['status'] as String,
       phone: json['phone'] as String,
       address: json['address'] as String,
-      avatar: json['avatar'] as String,
+      avatar: json['avatar'] != null ? Avatar.fromJson(json['avatar']) : null,
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
@@ -64,7 +64,7 @@ class User {
       'status': status,
       'phone': phone,
       'address': address,
-      'avatar': avatar,
+      'avatar': avatar?.toJson(),
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
     };
@@ -80,5 +80,35 @@ class User {
     var bytes = utf8.encode(password); // Data to be hashed
     var digest = sha256.convert(bytes); // Creates SHA256 hash
     return digest.toString(); // Returns hashed password as a string
+  }
+}
+
+class Avatar {
+  final String url;
+  final String fileName;
+  final String fileType;
+
+  Avatar({
+    required this.url,
+    required this.fileName,
+    required this.fileType,
+  });
+
+  // Factory constructor for creating an Avatar instance from JSON
+  factory Avatar.fromJson(Map<String, dynamic> json) {
+    return Avatar(
+      url: json['url'],
+      fileName: json['fileName'],
+      fileType: json['fileType'],
+    );
+  }
+
+  // Method for converting an Avatar instance to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'url': url,
+      'fileName': fileName,
+      'fileType': fileType,
+    };
   }
 }

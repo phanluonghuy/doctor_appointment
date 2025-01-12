@@ -16,12 +16,13 @@ class UserViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> apiUpdateProfile(dynamic data, BuildContext context) async {
+  Future<void> apiUpdateProfile(dynamic data,dynamic image, BuildContext context) async {
     setLoading(true);
-    _userRepository.updateProfile(data).then((value) {
-      print(value);
+    _userRepository.updateProfile(data,image).then((value) async {
+      // print(value);
       if (value.acknowledgement ?? false) {
         Utils.flushBarSuccessMessage(value.description ?? "", context);
+        await getUserProfile();
       } else {
         Utils.flushBarErrorMessage(value.description ?? "", context);
       }
