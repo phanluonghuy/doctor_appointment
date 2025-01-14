@@ -1,6 +1,7 @@
 import 'package:doctor_appointment/view/booking_screen.dart';
 import 'package:doctor_appointment/view/chat_screen.dart';
 import 'package:doctor_appointment/view/explore_screen.dart';
+import 'package:doctor_appointment/view/forgotPassword/forgotPassword_screen.dart';
 import 'package:doctor_appointment/view/profile_screen.dart';
 import 'package:doctor_appointment/view/signUp/signup_verityOTP_screen.dart';
 import 'package:doctor_appointment/view/started/started_screen.dart';
@@ -80,6 +81,9 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(path: '/changePassword',
         builder: (context, state) => const ChangePasswordScreen()
+    ),
+    GoRoute(path: '/forgotPassword',
+        builder: (context, state) => const ForgotPasswordScreen()
     ),
   ],
   errorBuilder: (context, state) => const Scaffold(

@@ -40,19 +40,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final FocusNode _addressFocus = FocusNode();
   final bool mobileOnly = true;
 
-  Future<void> printImageSize(File image) async {
-    if (image != null) {
-      // Get the size of the image in bytes
-      int imageSizeInBytes = await image.length();
-
-      // Convert bytes to KB and MB for better readability
-      double imageSizeInKB = imageSizeInBytes / 1024; // Size in KB
-      double imageSizeInMB = imageSizeInKB / 1024; // Size in MB
-
-      print('Image size: ${imageSizeInMB.toStringAsFixed(2)} MB');
-    }
-  }
-
   Future<void> getLostData() async {
     final ImagePicker picker = ImagePicker();
     showDialog(
@@ -110,7 +97,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (!_isInitialized) {
       final userViewModel = Provider.of<UserViewModel>(context, listen: false);
@@ -252,7 +238,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               SizedBox(height: height * 0.01),
               PhoneFormField(
                 initialValue: PhoneNumber.parse(
-                    '+${userViewModel.user?.phone}'), // or use the controller
+                    '+${userViewModel.user?.phone ?? "84"}'),
+                // initialValue: PhoneNumber.parse(
+                //      "+84"),// or use the controller
                 validator: _getValidator(context),
                 focusNode: _phoneFocus,
                 onSubmitted: (phoneNumber) {

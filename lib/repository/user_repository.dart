@@ -29,4 +29,33 @@ class UserRepository {
       rethrow;
     }
   }
+
+  Future<dynamic> sendOTP(dynamic data) async {
+    try {
+      final response =
+      await _network.getPostApiResponse(AppUrls.sendForgotOTP, data);
+      return response;
+    } catch (e) {
+      rethrow; //Big Brain
+    }
+  }
+
+
+  Future<dynamic> verifyOTP(dynamic data) async {
+    try {
+      final response =
+      await _network.getPostApiResponse(AppUrls.verifyForgotOTP, data);
+      return response;
+    } catch (e) {
+      rethrow; //Big Brain
+    }
+  }
+  Future<ApiResponse> resetPassword(Map<String, dynamic> data) async {
+    try {
+      final response = await _network.getPostApiResponse(AppUrls.resetPassword, data,isTokenRequired: true);
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

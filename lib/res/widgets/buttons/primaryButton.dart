@@ -6,13 +6,15 @@ class PrimaryButton extends StatelessWidget {
   final VoidCallback onPressed;
   final bool loading;
   final BuildContext context;
+  final FocusNode? focusNode;
 
   const PrimaryButton({
     Key? key,
     required this.text,
     required this.onPressed,
     required this.context,
-    this.loading = false
+    this.loading = false,
+    this.focusNode,
   }) : super(key: key);
 
   @override
