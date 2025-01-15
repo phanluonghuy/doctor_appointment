@@ -1,4 +1,6 @@
 import 'package:doctor_appointment/res/widgets/coloors.dart';
+import 'package:doctor_appointment/viewModel/doctorBooking_viewmodel.dart';
+import 'package:doctor_appointment/viewModel/doctor_viewmodel.dart';
 import 'package:doctor_appointment/viewModel/signup_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:doctor_appointment/utils/routes.dart';
@@ -21,7 +23,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthViewModel(),lazy: true),
         ChangeNotifierProvider(create: (_) => UserViewModel()),
-        // ChangeNotifierProvider(create: (_) => HomeViewModel()),
+        ChangeNotifierProvider(create: (_) => DoctorViewModel()),
+        ChangeNotifierProvider(create: (_) => DoctorBookingViewModel(),lazy: true),
         ChangeNotifierProvider(create: (_) => SignUpViewModel(),lazy: true),
       ],
       child: WillPopScope(

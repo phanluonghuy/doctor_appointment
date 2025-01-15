@@ -6,9 +6,12 @@ class AppUrls {
   static const sendForgotOTP = "$baseUrl/user/getForgotOTP";
   static const verifyOTP = "$baseUrl/user/verifyOTP";
   static const verifyForgotOTP = "$baseUrl/user/verifyForgotOTP";
-  static const getMe= "$baseUrl/user/me";
-  static const updateProfile= "$baseUrl/user/update-profile";
+  static const getMe = "$baseUrl/user/me";
+  static const updateProfile = "$baseUrl/user/update-profile";
   static const changePassword = "$baseUrl/user/reset-password";
   static const resetPassword = "$baseUrl/user/change-password";
 
+  static const getDoctors = "$baseUrl/user/doctorsInfo";
+  static var getDoctorById =
+      (String id) => "$baseUrl/user/doctor/$id/full-info";
 }

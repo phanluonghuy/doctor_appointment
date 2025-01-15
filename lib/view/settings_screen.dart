@@ -40,7 +40,6 @@ class _SettingScreenState extends State<SettingScreen> {
             },
           ),
         ),
-        leadingWidth: width * 0.2,
       ),
       body: SingleChildScrollView(
         child: SafeArea(

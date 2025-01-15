@@ -1,6 +1,6 @@
 import 'package:doctor_appointment/res/texts/app_text.dart';
 import 'package:doctor_appointment/res/widgets/homeBanner.dart';
-import 'package:doctor_appointment/utils/categoryList.dart';
+import 'package:doctor_appointment/utils/List_Helper.dart';
 import 'package:doctor_appointment/viewModel/auth_viewmodel.dart';
 import 'package:doctor_appointment/viewModel/signup_viewmodel.dart';
 import 'package:flutter/material.dart';
@@ -138,12 +138,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             SizedBox(height: 8),
-                            Container(
-                              child: Text(
-                                CategoryList.keys.elementAt(index),
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.center,
-                              ),
+                            Text(
+                              CategoryList.keys.elementAt(index),
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
                             )
                           ],
                         ));

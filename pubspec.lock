@@ -113,6 +113,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.8"
+  custom_rating_bar:
+    dependency: "direct main"
+    description:
+      name: custom_rating_bar
+      sha256: c2dafa488843b29f50ac2c2905b6a4cefd2cb603de31c6224adb047b6ed8593e
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   diacritic:
     dependency: transitive
     description:
@@ -358,7 +366,7 @@ packages:
     source: hosted
     version: "0.2.1+1"
   intl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: intl
       sha256: d6f56758b7d3014a48af9701c085700aac781a92a87a62b1333b46d8879661cf

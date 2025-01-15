@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:doctor_appointment/models/user_model.dart';
 import 'package:doctor_appointment/repository/auth_repository.dart';
 import 'package:doctor_appointment/utils/utils.dart';
 import 'package:doctor_appointment/viewModel/user_viewmodel.dart';

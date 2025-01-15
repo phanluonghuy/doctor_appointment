@@ -52,7 +52,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             },
           ),
         ),
-        leadingWidth: width * 0.2,
       ),
       body: SingleChildScrollView(
         child: SafeArea(

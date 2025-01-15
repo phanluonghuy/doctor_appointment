@@ -135,7 +135,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             },
           ),
         ),
-        leadingWidth: width * 0.2,
       ),
       body: SingleChildScrollView(
         child: SafeArea(

@@ -1,5 +1,6 @@
 import 'package:doctor_appointment/view/booking_screen.dart';
 import 'package:doctor_appointment/view/chat_screen.dart';
+import 'package:doctor_appointment/view/doctorBooking/selectBookingTime_screen.dart';
 import 'package:doctor_appointment/view/explore_screen.dart';
 import 'package:doctor_appointment/view/forgotPassword/forgotPassword_screen.dart';
 import 'package:doctor_appointment/view/profile_screen.dart';
@@ -13,6 +14,7 @@ import 'package:doctor_appointment/view/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 import '../res/navigations/navigationMenu.dart';
 import '../view/changePassword_screen.dart';
+import '../view/doctorBooking/doctorBookingMain_screen.dart';
 import '../view/editProfile_screen.dart';
 import '../view/settings_screen.dart';
 import '../view/signUp/signup_createPassword.dart';
@@ -36,55 +38,45 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
         path: '/createPassword',
-        builder: (context, state) => const SignUpCreatePasswordScreen()
-    ),
-    GoRoute(path: '/splash',
-        builder: (context, state) => const SplashScreen()
-    ),
+        builder: (context, state) => const SignUpCreatePasswordScreen()),
+    GoRoute(path: '/splash', builder: (context, state) => const SplashScreen()),
     GoRoute(
       path: '/home',
       builder: (context, state) => const HomeScreen(),
     ),
     GoRoute(
-      path : '/navigationMenu',
+      path: '/navigationMenu',
       builder: (context, state) => const NavigationMenu(),
     ),
     GoRoute(
-        path: '/welcome',
-        builder: (context, state) => const WelcomeScreen()
-    ),
+        path: '/welcome', builder: (context, state) => const WelcomeScreen()),
     GoRoute(
-        path: '/started',
-        builder: (context, state) => const StartedScreen()
-    ),
+        path: '/started', builder: (context, state) => const StartedScreen()),
     GoRoute(
-        path: '/explore',
-        builder: (context, state) => const ExploreScreen()
-    ),
+        path: '/explore', builder: (context, state) => const ExploreScreen()),
     GoRoute(
-        path: '/booking',
-        builder: (context, state) => const BookingScreen()
-    ),
+        path: '/booking', builder: (context, state) => const BookingScreen()),
+    GoRoute(path: '/chat', builder: (context, state) => const ChatScreen()),
     GoRoute(
-        path: '/chat',
-        builder: (context, state) => const ChatScreen()
-    ),
+        path: '/profile', builder: (context, state) => const ProfileScreen()),
     GoRoute(
-        path: '/profile',
-        builder: (context, state) => const ProfileScreen()
-    ),
-    GoRoute(path: '/editProfile',
-        builder: (context, state) => const EditProfileScreen()
-    ),
-    GoRoute(path: '/settings',
-        builder: (context, state) => const SettingScreen()
-    ),
-    GoRoute(path: '/changePassword',
-        builder: (context, state) => const ChangePasswordScreen()
-    ),
-    GoRoute(path: '/forgotPassword',
-        builder: (context, state) => const ForgotPasswordScreen()
-    ),
+        path: '/editProfile',
+        builder: (context, state) => const EditProfileScreen()),
+    GoRoute(
+        path: '/settings', builder: (context, state) => const SettingScreen()),
+    GoRoute(
+        path: '/changePassword',
+        builder: (context, state) => const ChangePasswordScreen()),
+    GoRoute(
+        path: '/forgotPassword',
+        builder: (context, state) => const ForgotPasswordScreen()),
+    GoRoute(
+        path: '/doctorMain/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id'] ?? "";
+          return DoctorMainScreen(id: id);
+        }),
+    GoRoute(path: '/selectBookingTime', builder: (context, state) => const SelectBookingTimeScreen()),
   ],
   errorBuilder: (context, state) => const Scaffold(
     body: Center(
