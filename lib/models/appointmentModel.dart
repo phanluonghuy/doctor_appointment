@@ -10,6 +10,8 @@ class Appointment {
   final String? notes; // Notes are optional
   final int queueNumber;
   final String priority; // "low", "medium", "high"
+  final String? doctorName;
+  final String? doctorAvatarUrl;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -25,6 +27,8 @@ class Appointment {
     required this.priority,
     required this.createdAt,
     required this.updatedAt,
+    this.doctorName,
+    this.doctorAvatarUrl,
   });
 
   /// Factory constructor to create an `Appointment` object from JSON
@@ -39,6 +43,8 @@ class Appointment {
       notes: json['notes'] as String?,
       queueNumber: json['queueNumber'] as int,
       priority: json['priority'] as String,
+      doctorName: json['doctorName'] as String?,
+      doctorAvatarUrl: json['doctorAvatarUrl'] as String?,
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );

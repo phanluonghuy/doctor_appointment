@@ -15,4 +15,7 @@ class AppUrls {
   static var getDoctorById =
       (String id) => "$baseUrl/user/doctor/$id/full-info";
   static const createAppointment = "$baseUrl/appointment";
+
+  static var getMyAppointments =
+      (String patientId) => "$baseUrl/appointment/patient/$patientId";
 }

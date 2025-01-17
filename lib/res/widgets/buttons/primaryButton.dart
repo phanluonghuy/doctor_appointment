@@ -7,6 +7,7 @@ class PrimaryButton extends StatelessWidget {
   final bool loading;
   final BuildContext context;
   final FocusNode? focusNode;
+  final double fontSize;
 
   const PrimaryButton({
     Key? key,
@@ -15,6 +16,7 @@ class PrimaryButton extends StatelessWidget {
     required this.context,
     this.loading = false,
     this.focusNode,
+    this.fontSize = 20.0,
   }) : super(key: key);
 
   @override
@@ -35,7 +37,7 @@ class PrimaryButton extends StatelessWidget {
                 )
               : Text(
                   text,
-                  style: const TextStyle(color: Colors.white, fontSize: 20),
+                  style: TextStyle(color: Colors.white, fontSize: fontSize),
                 ),
         ),
       ),
