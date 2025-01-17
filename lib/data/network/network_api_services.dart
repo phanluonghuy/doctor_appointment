@@ -4,10 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:doctor_appointment/data/app_exceptions.dart';
 import 'package:doctor_appointment/data/network/base_api_services.dart';
 import 'package:http_parser/http_parser.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../viewModel/user_viewmodel.dart';
 import '../response/api_response.dart';
 
 class NetworkApiServices extends BaseApiServices {

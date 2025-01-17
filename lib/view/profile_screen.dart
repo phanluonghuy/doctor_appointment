@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:doctor_appointment/res/widgets/buttons/primaryButton.dart';
 import 'package:doctor_appointment/res/widgets/profile_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:doctor_appointment/viewModel/user_viewmodel.dart';
@@ -10,6 +11,7 @@ import 'package:provider/provider.dart';
 import '../res/texts/app_text.dart';
 import '../res/widgets/buttons/backArrowButton.dart';
 import '../res/widgets/buttons/backButton.dart';
+import '../res/widgets/buttons/whitePrimaryButton.dart';
 import '../res/widgets/coloors.dart';
 import '../viewModel/NavigationProvider.dart';
 
@@ -45,8 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 radius: height * 0.08,
                 backgroundColor: Colors.grey.shade300,
                 child: CachedNetworkImage(
-                  imageUrl:
-                      userViewModel.user?.avatar?.url ?? "",
+                  imageUrl: userViewModel.user?.avatar?.url ?? "",
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -159,54 +160,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Text("Are you sure you want to logout?",
                                   style: AppTextStyle.body),
                               SizedBox(height: 20),
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(20)),
-                                    border: Border.all(
-                                        color: AppColors.primaryColor,
-                                        width: 2)),
-                                height: 50,
-                                width: double.infinity,
-                                child: MaterialButton(
+                              OutlinePrimaryButton(
+                                  text: "Cancel",
                                   onPressed: () {
                                     Navigator.pop(context);
-                                  },
-                                  child: Center(
-                                    child: Text(
-                                      'Cancel',
-                                      style: const TextStyle(
-                                          color: AppColors.primaryColor,
-                                          fontSize: 20),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                                  }),
                               SizedBox(height: 10),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: AppColors.primaryColor,
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(20)),
-                                ),
-                                height: 50,
-                                width: double.infinity,
-                                child: MaterialButton(
+                              PrimaryButton(
+                                  text: "Yes, Logout",
                                   onPressed: () {
                                     userViewModel.removeUser().then((value) {
                                       context.go('/login');
                                     });
                                   },
-                                  child: Center(
-                                    child: Text(
-                                      'Yes, Logout',
-                                      style: const TextStyle(
-                                          color: Colors.white, fontSize: 20),
-                                    ),
-                                  ),
-                                ),
-                              )
+                                  context: context)
                             ],
                           ),
                         );

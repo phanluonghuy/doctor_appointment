@@ -15,6 +15,8 @@ import 'package:go_router/go_router.dart';
 import '../res/navigations/navigationMenu.dart';
 import '../view/changePassword_screen.dart';
 import '../view/doctorBooking/doctorBookingMain_screen.dart';
+import '../view/doctorBooking/paymentBooking_screen.dart';
+import '../view/doctorBooking/successBooking_screen.dart';
 import '../view/editProfile_screen.dart';
 import '../view/settings_screen.dart';
 import '../view/signUp/signup_createPassword.dart';
@@ -77,6 +79,8 @@ final GoRouter router = GoRouter(
           return DoctorMainScreen(id: id);
         }),
     GoRoute(path: '/selectBookingTime', builder: (context, state) => const SelectBookingTimeScreen()),
+    GoRoute(path: '/paymentBooking', builder: (context, state) => const PaymentBookingScreen()),
+    GoRoute(path: '/successBooking', builder: (context, state) => const SuccessBookingScreen()),
   ],
   errorBuilder: (context, state) => const Scaffold(
     body: Center(

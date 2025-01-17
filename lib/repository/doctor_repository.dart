@@ -24,4 +24,15 @@ class DoctorRepository {
       rethrow;
     }
   }
+
+  Future<ApiResponse> createAppointment(dynamic data) async {
+    try {
+      final response = await _network.getPostApiResponse(
+          AppUrls.createAppointment, data,
+          isTokenRequired: true);
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

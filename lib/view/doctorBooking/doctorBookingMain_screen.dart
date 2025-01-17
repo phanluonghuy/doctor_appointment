@@ -92,6 +92,7 @@ class _DoctorMainScreenState extends State<DoctorMainScreen> {
                                 color: AppColors.primaryColor,
                               )),
                           SizedBox(height: 8),
+                          // TODO : Change the value to the actual number of patients
                           Text("7,500+",
                               style: AppTextStyle.body
                                   .copyWith(color: AppColors.primaryColor)),
@@ -110,6 +111,7 @@ class _DoctorMainScreenState extends State<DoctorMainScreen> {
                                 color: AppColors.primaryColor,
                               )),
                           SizedBox(height: 8),
+                          // TODO : Change the value to the actual number of years of experience
                           Text("10+",
                               style: AppTextStyle.body
                                   .copyWith(color: AppColors.primaryColor)),
@@ -128,6 +130,7 @@ class _DoctorMainScreenState extends State<DoctorMainScreen> {
                                 color: AppColors.primaryColor,
                               )),
                           SizedBox(height: 8),
+                          // TODO : Change the value to the actual rating
                           Text("4.9+",
                               style: AppTextStyle.body
                                   .copyWith(color: AppColors.primaryColor)),
@@ -146,6 +149,7 @@ class _DoctorMainScreenState extends State<DoctorMainScreen> {
                                 color: AppColors.primaryColor,
                               )),
                           SizedBox(height: 8),
+                          // TODO : Change the value to the actual number of reviews
                           Text("4,956",
                               style: AppTextStyle.body
                                   .copyWith(color: AppColors.primaryColor)),
@@ -258,7 +262,7 @@ class _DoctorMainScreenState extends State<DoctorMainScreen> {
           text: "Book Appointment",
           // loading: context.watch<UserViewModel>().isLoading,
           onPressed: () {
-            print("Book Appointment");
+            // print("Book Appointment");
             context.push('/selectBookingTime');
           },
           context: context,

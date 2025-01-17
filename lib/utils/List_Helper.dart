@@ -1,3 +1,4 @@
+import 'package:doctor_appointment/models/workScheduleModel.dart';
 import 'package:intl/intl.dart';
 
 Map<String, String> CategoryList = {
@@ -36,3 +37,38 @@ Map<String, String> generateNextSevenDaysMap() {
 
   return daysMap;
 }
+
+List<Map<String, dynamic>> getNext7DaysAvailability(List<AvailableTime> availableTimes) {
+  DateTime today = DateTime.now();
+  List<Map<String, dynamic>> result = [];
+
+  for (int i = 0; i < 7; i++) {
+    DateTime currentDate = today.add(Duration(days: i));
+    String currentDayName = DateFormat('EEEE').format(currentDate).toLowerCase();
+
+
+    // if (availableTimes.isNotEmpty) {
+    //   result.add({
+    //     "date": DateFormat('yyyy-MM-dd').format(currentDate),
+    //     "dayOfWeek": availableTimes,
+    //     "startTime": availability["startTime"],
+    //     "endTime": availability["endTime"],
+    //     "restTime": availability["restTime"],
+    //   });
+    // }
+    for (var availability in availableTimes) {
+      if (availability.dayOfWeek.toLowerCase() == currentDayName) {
+        result.add({
+          "date": DateFormat('yyyy-MM-dd').format(currentDate),
+          "dayOfWeek": availability.dayOfWeek,
+          "startTime": availability.startTime,
+          "endTime": availability.endTime
+        });
+      }
+    }
+  }
+
+  return result;
+}
+
+
