@@ -81,7 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               ProfileTab(
                 onPressed: () {
-                  print(userViewModel.user?.avatar?.url);
+                  context.read<NavigationProvider>().setIndex(0);
                 },
                 iconPath: 'assets/buttons/icons8-card.svg',
                 title: "Payment Methods",

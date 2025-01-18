@@ -12,6 +12,29 @@ Map<String, String> CategoryList = {
   "General": "assets/categories/icons8-doctor.svg",
 };
 
+final List<Map<String, dynamic>> paymentMethods = [
+  {
+    "name": "Visa",
+    "icon": "assets/payments/icons8-visa.svg",
+    "isEnable": false
+  },
+  {
+    "name": "Paypal",
+    "icon": "assets/payments/icons8-paypal.svg",
+    "isEnable": true
+  },
+  {
+    "name": "Stripe",
+    "icon": "assets/payments/icons8-stripe.svg",
+    "isEnable": false
+  },
+  {
+    "name": "Cash",
+    "icon": "assets/payments/icons8-cash.svg",
+    "isEnable": true
+  },
+];
+
 List<String> generateHourlyList(String start, String end) {
   final startHour = int.parse(start.split(":")[0]);
   final endHour = int.parse(end.split(":")[0]);

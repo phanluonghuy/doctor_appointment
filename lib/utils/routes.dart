@@ -78,9 +78,15 @@ final GoRouter router = GoRouter(
           final id = state.pathParameters['id'] ?? "";
           return DoctorMainScreen(id: id);
         }),
-    GoRoute(path: '/selectBookingTime', builder: (context, state) => const SelectBookingTimeScreen()),
-    GoRoute(path: '/paymentBooking', builder: (context, state) => const PaymentBookingScreen()),
-    GoRoute(path: '/successBooking', builder: (context, state) => const SuccessBookingScreen()),
+    GoRoute(
+        path: '/selectBookingTime',
+        builder: (context, state) => const SelectBookingTimeScreen()),
+    GoRoute(
+        path: '/paymentBooking',
+        builder: (context, state) => const PaymentBookingScreen()),
+    GoRoute(
+        path: '/successBooking',
+        builder: (context, state) => const SuccessBookingScreen()),
   ],
   errorBuilder: (context, state) => const Scaffold(
     body: Center(

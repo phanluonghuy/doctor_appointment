@@ -1,3 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:doctor_appointment/models/doctorModel.dart';
+import 'package:doctor_appointment/repository/doctor_repository.dart';
 import 'package:doctor_appointment/res/texts/app_text.dart';
 import 'package:doctor_appointment/res/widgets/homeBanner.dart';
 import 'package:doctor_appointment/utils/List_Helper.dart';
@@ -10,6 +13,8 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../res/widgets/coloors.dart';
+import '../viewModel/NavigationProvider.dart';
+import '../viewModel/doctor_viewmodel.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,6 +25,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController searchController = TextEditingController();
+  DoctorRepository _doctorRepository = DoctorRepository();
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -113,13 +124,13 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             SizedBox(
-              height: height * 0.2,
+              height: height * 0.15,
               child: ListView.builder(
                   itemCount: CategoryList.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
                     return Container(
-                      padding: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(8),
                         child: Column(
                           children: [
                             Container(
@@ -147,6 +158,100 @@ class _HomeScreenState extends State<HomeScreen> {
                         ));
                   }),
             ),
+            Row(
+              children: [
+                Text(
+                  'Top Doctors',
+                  style: AppTextStyle.subtitle,
+                ),
+                const Spacer(),
+                TextButton(
+                  onPressed: () {
+                    Provider.of<NavigationProvider>(context, listen: false)
+                        .setIndex(1);
+                  },
+                  child: Text('View all', style: AppTextStyle.link),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: height * 0.1,
+              child: FutureBuilder<List<Doctor>>(
+                future: _doctorRepository.getTopDoctor(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        "Error: ${snapshot.error}",
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    );
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Center(
+                      child: Text(
+                        "No doctors found.",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    );
+                  } else {
+                    final List<Doctor> doctors = snapshot.data!;
+                    return ListView.builder(
+                      itemCount: doctors.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        final doctor = doctors[index];
+                        return Center(
+                          child: Container(
+                            width: width * 0.6,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.grey.shade300),
+                            ),
+                            margin: const EdgeInsets.symmetric(horizontal: 4),
+                            child: ListTile(
+                              leading: SizedBox(
+                                width: 50,
+                                child: CachedNetworkImage(
+                                  imageUrl: doctor.avatar.url,
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.grey.shade300),
+                                      borderRadius: BorderRadius.circular(10),
+                                      image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  placeholder: (context, url) => Center(
+                                      child: CircularProgressIndicator()),
+                                  errorWidget: (context, url, error) => Icon(
+                                      Icons.person,
+                                      color: Colors.grey.shade800),
+                                ),
+                              ),
+                              title: Text('Dr. ${doctor.name.split(' ').last}'),
+                              subtitle: Text(
+                                "Rating: ${doctor.averageRating.toStringAsFixed(1) ?? 'N/A'} ⭐ \nReviews: ${doctor.totalReviews ?? 0} 📃",
+                              ),
+                              onTap: () {
+                                // Navigate to doctor details or perform an action
+                                context.push('/doctorMain/${doctor.id}');
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
+            ),
+            SizedBox(height: 80),
           ],
         ),
       ),

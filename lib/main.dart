@@ -1,4 +1,5 @@
 import 'package:doctor_appointment/res/widgets/coloors.dart';
+import 'package:doctor_appointment/viewModel/NavigationProvider.dart';
 import 'package:doctor_appointment/viewModel/doctorBooking_viewmodel.dart';
 import 'package:doctor_appointment/viewModel/doctor_viewmodel.dart';
 import 'package:doctor_appointment/viewModel/myBooking_viewmodel.dart';
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthViewModel(),lazy: true),
         ChangeNotifierProvider(create: (_) => UserViewModel()),
         ChangeNotifierProvider(create: (_) => DoctorViewModel()),
+        ChangeNotifierProvider(create: (_) => NavigationProvider()),
         ChangeNotifierProvider(create: (_) => DoctorBookingViewModel(),lazy: true),
         ChangeNotifierProvider(create: (_) => MyBookingViewModel(),lazy: true),
         ChangeNotifierProvider(create: (_) => SignUpViewModel(),lazy: true),

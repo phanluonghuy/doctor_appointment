@@ -12,4 +12,9 @@ class NavigationProvider with ChangeNotifier {
     tabController.index = index; // Set tabController index
     notifyListeners();
   }
+
+  void setIndexWithOutNotify(int index) {
+    _currentIndex = index;
+    tabController.index = index; // Set tabController index
+  }
 }

@@ -1,5 +1,5 @@
 class AppUrls {
-  static const baseUrl = "http://192.168.109.210:8080/api";
+  static const baseUrl = "http://192.168.203.234:8080/api";
   static const loginEndPoint = "$baseUrl/user/sign-in";
   static const registerEndPoint = "$baseUrl/user/sign-up";
   static const sendOTP = "$baseUrl/user/getOTP";
@@ -12,10 +12,17 @@ class AppUrls {
   static const resetPassword = "$baseUrl/user/change-password";
 
   static const getDoctors = "$baseUrl/user/doctorsInfo";
+
+  static const getTopDoctors = "$baseUrl/user/getTopDoctors";
   static var getDoctorById =
       (String id) => "$baseUrl/user/doctor/$id/full-info";
   static const createAppointment = "$baseUrl/appointment";
 
   static var getMyAppointments =
       (String patientId) => "$baseUrl/appointment/patient/$patientId";
+
+  static const createPayment = "$baseUrl/payment";
 }
+
+//testerpayment@test.com
+//Admin@123

@@ -14,6 +14,7 @@ class DoctorViewModel extends ChangeNotifier {
   }
 
   List<Doctor> doctors = [];
+  List<Doctor> topDoctors = [];
 
   List<String> categories = CategoryList.keys.toList();
   List<String> selectedCategories = ["All"];
@@ -66,4 +67,5 @@ class DoctorViewModel extends ChangeNotifier {
       setLoading(false);
     });
   }
+
 }

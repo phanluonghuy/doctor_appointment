@@ -100,12 +100,12 @@ class _SelectBookingTimeScreenState extends State<SelectBookingTimeScreen> {
                       itemCount: next7Days.length,
                       itemBuilder: (BuildContext context, int index) {
                         final day = next7Days[index];
-                        final isSelected = doctorViewModel.getSelectedTimeIndex == index;
+                        final isSelected =
+                            doctorViewModel.getSelectedTimeIndex == index;
                         final textColor =
-                        isSelected ? Colors.white : Colors.black;
-                        final backgroundColor = isSelected
-                            ? AppColors.primaryColor
-                            : Colors.white;
+                            isSelected ? Colors.white : Colors.black;
+                        final backgroundColor =
+                            isSelected ? AppColors.primaryColor : Colors.white;
                         return GestureDetector(
                           onTap: () {
                             doctorViewModel.setSelectedTimeIndex(index);
@@ -219,24 +219,56 @@ class _SelectBookingTimeScreenState extends State<SelectBookingTimeScreen> {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(20),
-        child: PrimaryButton(
-          text: "Make Appointment",
-          loading: doctorViewModel.loading,
-          onPressed: () {
-            if (doctorViewModel.getSelectedTimeIndex == -1) {
-              Utils.flushBarErrorMessage(
-                  "Please select a time to book an appointment", context);
-              return;
-            }
-            doctorViewModel.selectedDate =
-                DateTime.parse(next7Days[doctorViewModel.getSelectedTimeIndex]["date"]);
-            //
-            // print(doctorViewModel.selectedDate);
-            // print(doctorViewModel.symptoms);
-            context.push('/paymentBooking');
-          },
-          context: context,
-        ),
+        child: Wrap(children: [
+          Row(
+            children: [
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                "Total: ",
+                style: AppTextStyle.subtitle,
+              ),
+              Spacer(),
+              Text(
+                "\$10",
+                style: AppTextStyle.subtitle.copyWith(
+                    color: AppColors.primaryColor, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+            ],
+          ),
+          PrimaryButton(
+            text: "Make Appointment",
+            loading: doctorViewModel.isQueue,
+            onPressed: () {
+              if (doctorViewModel.getSelectedTimeIndex == -1) {
+                Utils.flushBarErrorMessage(
+                    "Please select a time to book an appointment", context);
+                return;
+              }
+              if (doctorViewModel.getSymptoms?.isEmpty ?? false) {
+                Utils.flushBarErrorMessage(
+                    "Please write your symptoms to book an appointment", context);
+                return;
+              }
+
+              doctorViewModel.selectedDate = DateTime.parse(
+                  next7Days[doctorViewModel.getSelectedTimeIndex]["date"]);
+              Map<String, dynamic> data = {
+                "doctorId": doctorViewModel.doctorBooking?.doctor.id ?? "",
+                "appointmentDate":
+                    doctorViewModel.getSelectedDate.toIso8601String(),
+                "symptoms": doctorViewModel.getSymptoms,
+                "notes": "N/A",
+              };
+              doctorViewModel.createAppointment(data, context);
+            },
+            context: context,
+          )
+        ]),
       ),
     );
   }

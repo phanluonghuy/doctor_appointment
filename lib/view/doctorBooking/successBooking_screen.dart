@@ -16,6 +16,7 @@ import '../../res/widgets/buttons/whitePrimaryButton.dart';
 import '../../res/widgets/doctorCard.dart';
 import '../../utils/List_Helper.dart';
 import '../../utils/utils.dart';
+import '../../viewModel/NavigationProvider.dart';
 import '../../viewModel/doctorBooking_viewmodel.dart';
 
 class SuccessBookingScreen extends StatefulWidget {
@@ -112,13 +113,19 @@ class _SuccessBookingScreenState extends State<SuccessBookingScreen> {
             PrimaryButton(
               text: "View Appointments",
               loading: doctorViewModel.loading,
-              onPressed: () {},
+              onPressed: () {
+                Provider.of<NavigationProvider>(context, listen: false)
+                    .setIndex(2);
+                context.go('/navigationMenu');
+              },
               context: context,
             ),
             SizedBox(height: 10),
             OutlinePrimaryButton(
                 text: "Go to Home",
                 onPressed: () {
+                  Provider.of<NavigationProvider>(context, listen: false)
+                      .setIndex(0);
                   context.go('/navigationMenu');
                 }),
           ],
