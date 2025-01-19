@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:doctor_appointment/models/user_model.dart';
 import 'package:doctor_appointment/repository/auth_repository.dart';
 import 'package:doctor_appointment/utils/utils.dart';
 import 'package:doctor_appointment/viewModel/user_viewmodel.dart';
@@ -45,7 +44,7 @@ class AuthViewModel with ChangeNotifier {
       userPreference.saveUser(value.data ?? "");
 
       Utils.flushBarErrorMessage("Login Successfully", context);
-
+      context.read<UserViewModel>().getUserProfile();
       context.go('/navigationMenu');
     }).onError((error, stackTrace) {
       Utils.flushBarErrorMessage(error.toString(), context);

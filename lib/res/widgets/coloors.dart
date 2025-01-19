@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 class AppColors {
   static final buttonColor = Colors.greenAccent.shade700;
   static const primaryColor = Color(0xFF0165FC);
+  static const Color lightPrimaryColor = Color(0xFFDBEAFF);
   static const Color greyColor = Color(0xFFEAECF0);
 
   static const MaterialColor primarySwatch = MaterialColor(
     0xFF0165FC,
     <int, Color>{
-      50: Color(0xFFE3F2FD),  // Lightest shade
+      50: Color(0xFFE3F2FD),
+      70 : Color(0xFFD6EAF8),// Lightest shade
       100: Color(0xFFBBDEFB),
       200: Color(0xFF90CAF9),
       300: Color(0xFF64B5F6),

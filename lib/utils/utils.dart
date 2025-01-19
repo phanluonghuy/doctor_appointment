@@ -20,7 +20,8 @@ class Utils {
     );
   }
 
-  static void flushBarErrorMessage(String message, BuildContext context) {
+  static void flushBarErrorMessage(String message, BuildContext context,
+      {bool isBottom = true}) {
     showFlushbar(
       context: context,
       flushbar: Flushbar(
@@ -30,7 +31,7 @@ class Utils {
         message: message,
         duration: const Duration(seconds: 3),
         borderRadius: BorderRadius.circular(8),
-        flushbarPosition: FlushbarPosition.BOTTOM,
+        flushbarPosition: (isBottom) ? FlushbarPosition.BOTTOM : FlushbarPosition.TOP,
         backgroundColor: Colors.red,
         reverseAnimationCurve: Curves.easeInOut,
         positionOffset: 20,
