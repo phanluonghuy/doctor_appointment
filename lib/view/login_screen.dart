@@ -95,6 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: TextButton(
                   onPressed: () {
                     // Navigator.pushNamed(context, RoutesNames.forgotPassword);
+                    context.push('/forgotPassword');
                   },
                   child: Text("Forgot Password?"),
                 ),
@@ -130,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       "password": _passwordController.text.toString()
                     };
                     authviewmodel.apilogin(data, context);
-                    debugPrint("hit API");
+                    // debugPrint("hit API");
                   },
                   context: context),
               SizedBox(height: height * 0.02),

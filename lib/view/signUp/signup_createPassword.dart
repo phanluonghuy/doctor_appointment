@@ -257,7 +257,7 @@ class _SignUpCreatePasswordScreenState extends State<SignUpCreatePasswordScreen>
 
                         if (AppRegex.isValidPassword(_passwordController.text) == false) {
                           Utils.flushBarErrorMessage(
-                              "Password has 1 Lower, 1 Upper, 1 Number, 1 Symbols", context);
+                              "Password must has 1 Lower, 1 Upper, 1 Number, 1 Symbols", context);
                           return;
                         }
 
@@ -299,6 +299,7 @@ class _SignUpCreatePasswordScreenState extends State<SignUpCreatePasswordScreen>
                           "phone": _phoneNumber,
                           "dateOfBirth" : signupviewmodel.dob.toString(),
                           "isFemale" : _isFemale,
+                          "address" : _addressController.text
                         };
 
                         //print(signupviewmodel.email + signupviewmodel.name + signupviewmodel.password + signupviewmodel.phoneNumber + signupviewmodel.getIsFemale.toString() + signupviewmodel.address);
