@@ -100,11 +100,12 @@ packages:
   chatview:
     dependency: "direct main"
     description:
-      name: chatview
-      sha256: "2f9b4ba79ef91e94e7ae8c9c9b4f96336ec59ab9c1e70a77b7c9b5ed0c378454"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.0"
+      path: "."
+      ref: main
+      resolved-ref: f8e8edc8d2aa2909c441fae051e8392db5f23b49
+      url: "https://github.com/phuongtoan521h0486/flutter_chatview.git"
+    source: git
+    version: "2.4.0"
   checked_yaml:
     dependency: transitive
     description:
@@ -298,10 +299,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_country_selector
-      sha256: "71e06142b71fd9f645ec7aa1817e0468974d971258d829549f42f2d39250888a"
+      sha256: "354ec3913e6858f32e70a795d2f2451a741beb51bedc5a566b309890ecc49814"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.13"
+    version: "1.0.14"
   flutter_inappwebview:
     dependency: transitive
     description:
@@ -745,10 +746,10 @@ packages:
     dependency: "direct main"
     description:
       name: phone_form_field
-      sha256: "34284b32ce0708d6abceb210b628e23e31584bb636636b095ae0aeea4cc370cd"
+      sha256: "86b78602805863b6bb8cdbcc0e17a53e5f1e15041c8d8757bcfe0ac79a4c91fb"
       url: "https://pub.dev"
     source: hosted
-    version: "10.0.2"
+    version: "10.0.3"
   phone_numbers_parser:
     dependency: transitive
     description:
@@ -1002,14 +1003,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.3"
-  timeago:
-    dependency: transitive
-    description:
-      name: timeago
-      sha256: "054cedf68706bb142839ba0ae6b135f6b68039f0b8301cbe8784ae653d5ff8de"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.7.0"
   typed_data:
     dependency: transitive
     description:

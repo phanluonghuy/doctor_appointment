@@ -113,15 +113,15 @@ class _ConversationScreenState extends State<ConversationScreen> {
 
   void _onSendTap(
       String message, ReplyMessage replyMessage, MessageType messageType) async{
-    _chatController.addMessage(
-      Message(
-        id: DateTime.now().toString(),
-        createdAt: DateTime.now(),
-        message: message,
-        sentBy: _chatController.currentUser.id,
-        messageType: messageType,
-      ),
-    );
+    // _chatController.addMessage(
+    //   Message(
+    //     id: DateTime.now().toString(),
+    //     createdAt: DateTime.now(),
+    //     message: message,
+    //     sentBy: _chatController.currentUser.id,
+    //     messageType: messageType,
+    //   ),
+    // );
 
     SocketService.sendMessage({
       'from': currentUser.id,
@@ -227,8 +227,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
             lastSeenAgoBuilderVisibility: true,
             receiptsBuilderVisibility: true,
             enableScrollToBottomButton: true,
-            enableDoubleTapToLike: false,
-            enableSwipeToReply: false,
             enableTextField: true,
             enablePagination: true,
             enableChatSeparator: true,
@@ -237,7 +235,10 @@ class _ConversationScreenState extends State<ConversationScreen> {
             enableOtherUserName: true,
             enableOtherUserProfileAvatar: true,
             enableReplySnackBar: false,
-            enableReactionPopup: false),
+            enableReactionPopup: false,
+            enableSwipeToReply: false,
+          enableDoubleTapToLike: false,
+        ),
         scrollToBottomButtonConfig: ScrollToBottomButtonConfig(
           backgroundColor: AppColors.primaryColor,
           icon: Icon(
@@ -275,7 +276,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
               margin: EdgeInsets.all(16),
               borderRadius: BorderRadius.circular(10),
               hintText: "Type a message here...",
-              enabled: true),
+              enabled: true,
+          ),
         ),
         chatBubbleConfig: ChatBubbleConfiguration(
           receiptsWidgetConfig:
