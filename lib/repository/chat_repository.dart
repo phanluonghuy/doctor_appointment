@@ -14,4 +14,14 @@ class ChatRepository {
       rethrow; //Big Brain
     }
   }
+
+  Future<ApiResponse> updateConversationById(String conversationId) async {
+    try {
+      final response =
+      await _network.getGetApiResponse(AppUrls.getUpdateConversation(conversationId), false);
+      return response;
+    } catch (e) {
+      rethrow; //Big Brain
+    }
+  }
 }

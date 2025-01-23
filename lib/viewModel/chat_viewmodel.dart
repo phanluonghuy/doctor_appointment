@@ -2,9 +2,14 @@ import 'dart:convert';
 
 import 'package:doctor_appointment/repository/chat_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:http_parser/http_parser.dart';
 
 import '../models/chatModel.dart';
+import '../res/widgets/app_urls.dart';
 import '../utils/utils.dart';
+import 'package:http/http.dart' as http;
+
+
 
 class ChatViewModel with ChangeNotifier {
   final _chatRepo = ChatRepository();
@@ -40,5 +45,30 @@ class ChatViewModel with ChangeNotifier {
     }
   }
 
+  Future<void> updateConversation(String id, BuildContext context) async {
+    final value = await _chatRepo.updateConversationById(id);
+    // if (value.acknowledgement == false) {
+    //   Utils.flushBarErrorMessage(value.description ?? "An error occurred.", context);
+    //   return;
+    // }
+  }
+
+  Future<String> uploadImage(String filePath) async {
+    final uri = Uri.parse(AppUrls.uploadFileImage);
+
+    final request = http.MultipartRequest('POST', uri);
+
+    final file = await http.MultipartFile.fromPath(
+      'image-file',
+      filePath,
+      contentType: MediaType('image', 'jpeg'),
+    );
+    request.files.add(file);
+
+    final response = await request.send();
+    final responseData = await response.stream.bytesToString();
+    final responseJson = json.decode(responseData);
+    return responseJson['data'];
+  }
 
 }

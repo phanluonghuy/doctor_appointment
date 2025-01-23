@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatview/chatview.dart';
 import 'package:doctor_appointment/models/chatModel.dart';
@@ -11,6 +14,7 @@ import 'package:provider/provider.dart';
 import '../models/userModel.dart';
 import '../res/widgets/buttons/backButton.dart';
 import '../utils/utils.dart';
+import '../viewModel/chat_viewmodel.dart';
 import '../viewModel/user_viewmodel.dart';
 
 class ConversationScreen extends StatefulWidget {
@@ -25,7 +29,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
   late ChatController _chatController;
   late User currentUser;
   late User otherUser;
-  late List<Message> initialMessageList = [];
 
   @override
   void dispose() {
@@ -48,7 +51,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
         .first;
 
     _chatController = ChatController(
-      initialMessageList: initialMessageList,
+      initialMessageList: [],
       scrollController: ScrollController(),
       currentUser: ChatUser(
         id: currentUser.id,
@@ -71,7 +74,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
     SocketService.joinRoom(conversation.id!);
   }
 
-  void loadNewMessage(dynamic message) {
+  void loadNewMessage(dynamic message) async{
+    if (!mounted) return;
     _chatController.addMessage(
       Message(
           id: message['_id'] as String,
@@ -79,9 +83,13 @@ class _ConversationScreenState extends State<ConversationScreen> {
           createdAt: DateTime.parse(message['createdAt']),
           sentBy: message['from'] as String,
           messageType: Utils.getMessageType(message['messageType'] as String),
-          status: Utils.getMessageStatus(message['status'] as String)
-      ),
+          status: Utils.getMessageStatus(message['status'] as String)),
     );
+    if (!mounted) return;
+
+    final chatViewModel = Provider.of<ChatViewModel>(context, listen: false);
+    await chatViewModel.updateConversation(widget.conversation.id!, context);
+    await chatViewModel.getConversationsByUserId(currentUser.id, context);
   }
 
   void loadHistory(dynamic data) {
@@ -94,34 +102,11 @@ class _ConversationScreenState extends State<ConversationScreen> {
         status: Utils.getMessageStatus(message['status'] as String))));
   }
 
-  void receiveMessage() async {
-    _chatController.addMessage(
-      Message(
-        id: DateTime.now().toString(),
-        message: 'I will schedule the meeting.',
-        createdAt: DateTime.now(),
-        sentBy: '2',
-      ),
-    );
-    await Future.delayed(const Duration(milliseconds: 500));
-    _chatController.addReplySuggestions([
-      const SuggestionItemData(text: 'Thanks.'),
-      const SuggestionItemData(text: 'Thank you very much.'),
-      const SuggestionItemData(text: 'Great.')
-    ]);
-  }
-
-  void _onSendTap(
-      String message, ReplyMessage replyMessage, MessageType messageType) async{
-    // _chatController.addMessage(
-    //   Message(
-    //     id: DateTime.now().toString(),
-    //     createdAt: DateTime.now(),
-    //     message: message,
-    //     sentBy: _chatController.currentUser.id,
-    //     messageType: messageType,
-    //   ),
-    // );
+  void _onSendTap(String message, _, MessageType messageType) async {
+    if (messageType.isImage) {
+      final chatViewModel = context.read<ChatViewModel>();
+      message = await chatViewModel.uploadImage(message);
+    }
 
     SocketService.sendMessage({
       'from': currentUser.id,
@@ -129,7 +114,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
       'content': message,
       'messageType': messageType.name,
     });
-
 
     // Future.delayed(const Duration(milliseconds: 300), () {
     //   _chatController.initialMessageList.last.setStatus =
@@ -140,17 +124,47 @@ class _ConversationScreenState extends State<ConversationScreen> {
     // });
   }
 
-  void _onViewImage(Message message) {
+  void _onViewImage(Message message) async{
     showAdaptiveDialog(
       context: context,
-      builder: (context) => PhotoView(
-        imageProvider: message.message.startsWith("http")
-            ? NetworkImage(message.message)
-            : AssetImage(message.message),
-        wantKeepAlive: true,
-        backgroundDecoration: BoxDecoration(color: Colors.transparent),
-        enableRotation: true,
-        onTapDown: (_, __, ___) => context.pop(),
+      builder: (context)  =>
+          Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: EdgeInsets.zero,
+        child: Stack(
+          children: [
+            PhotoView(
+              imageProvider: message.message.startsWith("http")
+                  ? NetworkImage(message.message)
+                  : AssetImage(message.message),
+              wantKeepAlive: true,
+              backgroundDecoration: BoxDecoration(color: Colors.transparent),
+              enableRotation: false,
+            ),
+            Positioned(
+              bottom: 10,
+              left: 0,
+              right: 0,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Container(
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.5),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.close,
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -224,19 +238,19 @@ class _ConversationScreenState extends State<ConversationScreen> {
         onSendTap: _onSendTap,
         chatViewState: ChatViewState.hasMessages,
         featureActiveConfig: const FeatureActiveConfig(
-            lastSeenAgoBuilderVisibility: true,
-            receiptsBuilderVisibility: true,
-            enableScrollToBottomButton: true,
-            enableTextField: true,
-            enablePagination: true,
-            enableChatSeparator: true,
-            enableSwipeToSeeTime: true,
-            enableCurrentUserProfileAvatar: true,
-            enableOtherUserName: true,
-            enableOtherUserProfileAvatar: true,
-            enableReplySnackBar: false,
-            enableReactionPopup: false,
-            enableSwipeToReply: false,
+          lastSeenAgoBuilderVisibility: true,
+          receiptsBuilderVisibility: true,
+          enableScrollToBottomButton: true,
+          enableTextField: true,
+          enablePagination: true,
+          enableChatSeparator: true,
+          enableSwipeToSeeTime: true,
+          enableCurrentUserProfileAvatar: true,
+          enableOtherUserName: true,
+          enableOtherUserProfileAvatar: true,
+          enableReplySnackBar: false,
+          enableReactionPopup: false,
+          enableSwipeToReply: false,
           enableDoubleTapToLike: false,
         ),
         scrollToBottomButtonConfig: ScrollToBottomButtonConfig(
@@ -272,11 +286,11 @@ class _ConversationScreenState extends State<ConversationScreen> {
           textFieldBackgroundColor: Colors.white,
           closeIconColor: AppColors.primaryColor,
           textFieldConfig: TextFieldConfiguration(
-              textStyle: TextStyle(color: Colors.black),
-              margin: EdgeInsets.all(16),
-              borderRadius: BorderRadius.circular(10),
-              hintText: "Type a message here...",
-              enabled: true,
+            textStyle: TextStyle(color: Colors.black),
+            margin: EdgeInsets.all(16),
+            borderRadius: BorderRadius.circular(10),
+            hintText: "Type a message here...",
+            enabled: true,
           ),
         ),
         chatBubbleConfig: ChatBubbleConfiguration(
