@@ -1,5 +1,6 @@
 import 'package:doctor_appointment/res/widgets/coloors.dart';
 import 'package:doctor_appointment/viewModel/NavigationProvider.dart';
+import 'package:doctor_appointment/viewModel/chat_viewmodel.dart';
 import 'package:doctor_appointment/viewModel/doctorBooking_viewmodel.dart';
 import 'package:doctor_appointment/viewModel/doctor_viewmodel.dart';
 import 'package:doctor_appointment/viewModel/myBooking_viewmodel.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => ChatViewModel()),
         ChangeNotifierProvider(create: (_) => AuthViewModel(),lazy: true),
         ChangeNotifierProvider(create: (_) => UserViewModel()),
         ChangeNotifierProvider(create: (_) => DoctorViewModel()),

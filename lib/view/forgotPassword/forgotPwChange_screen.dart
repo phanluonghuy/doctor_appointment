@@ -125,6 +125,10 @@ class _ChangePassWordState extends State<ChangePassWord>
                             },
                           ),
                         ),
+                        textInputAction: TextInputAction.next,
+                        onTapOutside: (event) {
+                          FocusScope.of(context).unfocus();
+                        },
                       );
                     },
                   ),
@@ -158,6 +162,10 @@ class _ChangePassWordState extends State<ChangePassWord>
                             },
                           ),
                         ),
+                        textInputAction: TextInputAction.done,
+                        onTapOutside: (event) {
+                          FocusScope.of(context).unfocus();
+                        },
                       );
                     },
                   ),

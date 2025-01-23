@@ -1,3 +1,4 @@
+import 'package:doctor_appointment/models/chatModel.dart';
 import 'package:doctor_appointment/view/booking_screen.dart';
 import 'package:doctor_appointment/view/chat_screen.dart';
 import 'package:doctor_appointment/view/doctorBooking/selectBookingTime_screen.dart';
@@ -14,6 +15,7 @@ import 'package:doctor_appointment/view/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 import '../res/navigations/navigationMenu.dart';
 import '../view/changePassword_screen.dart';
+import '../view/conversation_screen.dart';
 import '../view/doctorBooking/doctorBookingMain_screen.dart';
 import '../view/doctorBooking/paymentBooking_screen.dart';
 import '../view/doctorBooking/successBooking_screen.dart';
@@ -58,7 +60,18 @@ final GoRouter router = GoRouter(
         path: '/explore', builder: (context, state) => const ExploreScreen()),
     GoRoute(
         path: '/booking', builder: (context, state) => const BookingScreen()),
-    GoRoute(path: '/chat', builder: (context, state) => const ChatScreen()),
+    GoRoute(
+        path: '/chat',
+        builder: (context, state) => const ChatScreen(),
+        routes: [
+          GoRoute(
+              path: '/conversation',
+              builder: (context, state) {
+                final conversation = state.extra as Conversation;
+                return ConversationScreen(conversation: conversation);
+              }),
+        ]
+      ),
     GoRoute(
         path: '/profile', builder: (context, state) => const ProfileScreen()),
     GoRoute(

@@ -193,6 +193,10 @@ class _SelectBookingTimeScreenState extends State<SelectBookingTimeScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
+                    textInputAction: TextInputAction.done,
+                    onTapOutside: (event) {
+                      FocusScope.of(context).unfocus();
+                    },
                   ),
                   SizedBox(height: size.height * 0.04),
                   Container(

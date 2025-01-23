@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/userModel.dart'; // Make sure you have this User model
 import '../repository/user_repository.dart';
+import '../utils/socketio.dart';
 import '../utils/utils.dart';
 
 class UserViewModel with ChangeNotifier {
@@ -60,6 +61,7 @@ class UserViewModel with ChangeNotifier {
   Future<bool> removeUser() async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     sp.remove("token");
+    SocketService.disconnect();
     _user = null; // Clear user data
     notifyListeners(); // Notify listeners after removing the user
     return true;
@@ -79,6 +81,9 @@ class UserViewModel with ChangeNotifier {
       if (token != null) {
         _userRepository.getProfile().then((value) {
           _user = User.fromJson(value.data);
+          if (_user != null) {
+            SocketService.connect(_user!.id);
+          }
           // print(_user?.name ?? "No name");
           notifyListeners();
         });

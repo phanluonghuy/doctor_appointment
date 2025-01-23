@@ -45,6 +45,10 @@
 			<string>UIInterfaceOrientationLandscapeLeft</string>
 			<string>UIInterfaceOrientationLandscapeRight</string>
 		</array>
+		<key>NSCameraUsageDescription</key>
+		<string>Doctor Pill need permission to access your camera</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>Doctor Pill need permission to access your gallery</string>
 		<key>UIStatusBarHidden</key>
 		<false/>
 	</dict>

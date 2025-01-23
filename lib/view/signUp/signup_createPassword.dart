@@ -123,6 +123,10 @@ class _SignUpCreatePasswordScreenState extends State<SignUpCreatePasswordScreen>
                             },
                           ),
                         ),
+                        textInputAction: TextInputAction.next,
+                        onTapOutside: (event) {
+                          FocusScope.of(context).unfocus();
+                        },
                       );
                     },
                   ),
@@ -154,6 +158,10 @@ class _SignUpCreatePasswordScreenState extends State<SignUpCreatePasswordScreen>
                             },
                           ),
                         ),
+                        textInputAction: TextInputAction.next,
+                        onTapOutside: (event) {
+                          FocusScope.of(context).unfocus();
+                        },
                       );
                     },
                   ),
@@ -234,6 +242,10 @@ class _SignUpCreatePasswordScreenState extends State<SignUpCreatePasswordScreen>
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
+                    textInputAction: TextInputAction.done,
+                    onTapOutside: (event) {
+                      FocusScope.of(context).unfocus();
+                    },
                   ),
                   SizedBox(height: height * 0.02),
                   Align(alignment: Alignment.centerLeft, child: Text("Your Date of Birth")),
