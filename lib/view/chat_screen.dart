@@ -26,8 +26,6 @@ class _ChatScreenState extends State<ChatScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final userViewModel = context.read<UserViewModel>();
       final chatViewModel = context.read<ChatViewModel>();
-      final doctorViewModel = context.read<DoctorViewModel>();
-      doctorViewModel.getAllDoctors(context);
       chatViewModel.getConversationsByUserId(userViewModel.user!.id, context);
     });
   }
@@ -43,10 +41,10 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
    List<Widget> buildDoctorsListRow(double height, double width) {
-     final doctorViewModel = context.watch<DoctorViewModel>();
+     final doctorViewModel = context.read<DoctorViewModel>();
     List<Doctor> onlineDoctor = doctorViewModel.doctors
         .where((doctor) => SocketService.usersOnline.contains(doctor.id))
-        .toList();
+        .toSet().toList();
 
     return onlineDoctor.isEmpty ? [Center(
       child: Text(
