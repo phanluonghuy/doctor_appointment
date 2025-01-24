@@ -14,9 +14,10 @@ class SocketService {
           .setTransports(['websocket'])
           .enableAutoConnect()
           .enableReconnection()
-          .setAuth({'userId': userId})
           .build(),
     );
+
+    socket.auth = {'userId': userId};
 
     socket.onConnect((_) {
       print('Connected to Socket.IO server');
@@ -67,6 +68,6 @@ class SocketService {
   }
 
   static void disconnect() {
-    socket.dispose();
+    socket.disconnect();
   }
 }
