@@ -1,10 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:doctor_appointment/models/chatModel.dart';
+import 'package:doctor_appointment/viewModel/doctor_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import '../models/doctorModel.dart';
 import '../models/userModel.dart';
 import '../res/widgets/coloors.dart';
+import '../utils/socketio.dart';
 import '../utils/utils.dart';
 import '../viewModel/chat_viewmodel.dart';
 import '../viewModel/user_viewmodel.dart';
@@ -23,6 +26,8 @@ class _ChatScreenState extends State<ChatScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final userViewModel = context.read<UserViewModel>();
       final chatViewModel = context.read<ChatViewModel>();
+      final doctorViewModel = context.read<DoctorViewModel>();
+      doctorViewModel.getAllDoctors(context);
       chatViewModel.getConversationsByUserId(userViewModel.user!.id, context);
     });
   }
@@ -37,37 +42,53 @@ class _ChatScreenState extends State<ChatScreen> {
     context.push('/chat/conversation', extra: conversation,);
   }
 
-  List<Widget> buildDoctorsListRow(double height, double width) {
-    return List.generate(
-      10,
-      (index) => CachedNetworkImage(
-        imageUrl:
-            "https://res.cloudinary.com/deynivwng/image/upload/v1736613310/Doctor%20Pill%20Storage/1736613306574_good-doctor.jpg.jpg",
-        imageBuilder: (context, imageProvider) => Container(
-          width: height * 0.06,
-          height: height * 0.06,
-          decoration: BoxDecoration(
-            // borderRadius: BorderRadius.all(Radius.circular(30)),
-            shape: BoxShape.circle,
-            image: DecorationImage(
-              image: imageProvider,
-              fit: BoxFit.fitWidth,
-            ),
-          ),
-        ),
-        placeholder: (context, url) =>
-            Center(child: CircularProgressIndicator()),
-        errorWidget: (context, url, error) => CircleAvatar(
-          radius: height * 0.03,
-          child: Icon(
-            Icons.person,
-            color: Colors.grey.shade800,
-            size: height * 0.03,
-          ),
+   List<Widget> buildDoctorsListRow(double height, double width) {
+     final doctorViewModel = context.watch<DoctorViewModel>();
+    List<Doctor> onlineDoctor = doctorViewModel.doctors
+        .where((doctor) => SocketService.usersOnline.contains(doctor.id))
+        .toList();
+
+    return onlineDoctor.isEmpty ? [Center(
+      child: Text(
+        "No doctors available",
+        style: TextStyle(
+          color: Colors.grey,
+          fontSize: 16,
         ),
       ),
+    )] : List.generate(
+      onlineDoctor.length,
+          (index) {
+        final doctor = onlineDoctor[index];
+        return CachedNetworkImage(
+          imageUrl: doctor.avatar.url,
+          imageBuilder: (context, imageProvider) => Container(
+            width: height * 0.06,
+            height: height * 0.06,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          placeholder: (context, url) => Center(
+            child: CircularProgressIndicator(),
+          ),
+          errorWidget: (context, url, error) => CircleAvatar(
+            radius: height * 0.03,
+            child: Icon(
+              Icons.person,
+              color: Colors.grey.shade800,
+              size: height * 0.03,
+            ),
+          ),
+        );
+      },
     );
   }
+
 
   Widget buildDoctorsListColumn(double height, double width, Conversation conversation) {
     final userViewModel = context.read<UserViewModel>();
@@ -114,7 +135,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     height: height * 0.01,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.green,
+                      color: SocketService.isUserOnline(otherUser.id) ? Colors.green : Colors.grey,
                       border: Border.all(
                         color: Colors.white,
                         width: 1,
@@ -203,21 +224,10 @@ class _ChatScreenState extends State<ChatScreen> {
                 scrollDirection: Axis.horizontal,
                 child: chatViewModel.loading
                     ? Center(child: CircularProgressIndicator())
-                    : (conversations.isEmpty
-                    ? Center(
-                  child: Text(
-                    "No doctors available",
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
-                    ),
-                  ),
-                )
                     : Row(
                   spacing: 16,
                   children: buildDoctorsListRow(height, width),
                 )),
-              ),
               chatViewModel.loading
                   ? Expanded(child: Center(child: CircularProgressIndicator()))
                   : (conversations.isEmpty

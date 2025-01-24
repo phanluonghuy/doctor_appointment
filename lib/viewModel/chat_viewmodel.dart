@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:doctor_appointment/repository/chat_repository.dart';
+import 'package:doctor_appointment/utils/socketio.dart';
 import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
 
@@ -47,10 +48,6 @@ class ChatViewModel with ChangeNotifier {
 
   Future<void> updateConversation(String id, BuildContext context) async {
     final value = await _chatRepo.updateConversationById(id);
-    // if (value.acknowledgement == false) {
-    //   Utils.flushBarErrorMessage(value.description ?? "An error occurred.", context);
-    //   return;
-    // }
   }
 
   Future<String> uploadImage(String filePath) async {

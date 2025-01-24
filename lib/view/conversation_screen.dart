@@ -29,6 +29,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
   late ChatController _chatController;
   late User currentUser;
   late User otherUser;
+  late bool _isOnline = false;
 
   @override
   void dispose() {
@@ -49,6 +50,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
     otherUser = conversation.participants!
         .where((user) => user.id != userViewModel.user!.id)
         .first;
+    _isOnline = SocketService.isUserOnline(otherUser.id);
 
     _chatController = ChatController(
       initialMessageList: [],
@@ -71,20 +73,36 @@ class _ConversationScreenState extends State<ConversationScreen> {
 
     SocketService.onShowHistory(loadHistory);
     SocketService.onNewMessage(loadNewMessage);
+    SocketService.onSeenResponse(handleSeenResponse);
     SocketService.joinRoom(conversation.id!);
+  }
+
+  void handleSeenResponse(dynamic response) {
+    String userId = response['userId'];
+    int modifiedCount = response['modifiedCount'];
+    if (modifiedCount != 0) {
+      Message lastMsg = _chatController.initialMessageList.last;
+      if (lastMsg.sentBy != userId) {
+        lastMsg.setStatus = MessageStatus.read;
+      }
+    }
   }
 
   void loadNewMessage(dynamic message) async{
     if (!mounted) return;
-    _chatController.addMessage(
-      Message(
+    if (!_chatController.initialMessageList.any((msg) => msg.id == message['_id'])) {
+      _chatController.addMessage(
+        Message(
           id: message['_id'] as String,
           message: message['content'] as String,
           createdAt: DateTime.parse(message['createdAt']),
           sentBy: message['from'] as String,
           messageType: Utils.getMessageType(message['messageType'] as String),
-          status: Utils.getMessageStatus(message['status'] as String)),
-    );
+          status: Utils.getMessageStatus(message['status'] as String),
+        ),
+      );
+      SocketService.seen(widget.conversation.id!);
+    }
     if (!mounted) return;
 
     final chatViewModel = Provider.of<ChatViewModel>(context, listen: false);
@@ -93,13 +111,20 @@ class _ConversationScreenState extends State<ConversationScreen> {
   }
 
   void loadHistory(dynamic data) {
-    data.forEach((message) => _chatController.addMessage(Message(
-        id: message['_id'] as String,
-        message: message['content'] as String,
-        createdAt: DateTime.parse(message['createdAt']),
-        sentBy: message['from'] as String,
-        messageType: Utils.getMessageType(message['messageType'] as String),
-        status: Utils.getMessageStatus(message['status'] as String))));
+    data.forEach((message) {
+      final messageId = message['_id'] as String;
+
+      if (!_chatController.initialMessageList.any((msg) => msg.id == messageId)) {
+        _chatController.addMessage(Message(
+          id: messageId,
+          message: message['content'] as String,
+          createdAt: DateTime.parse(message['createdAt']),
+          sentBy: message['from'] as String,
+          messageType: Utils.getMessageType(message['messageType'] as String),
+          status: Utils.getMessageStatus(message['status'] as String),
+        ));
+      }
+    });
   }
 
   void _onSendTap(String message, _, MessageType messageType) async {
@@ -114,14 +139,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
       'content': message,
       'messageType': messageType.name,
     });
-
-    // Future.delayed(const Duration(milliseconds: 300), () {
-    //   _chatController.initialMessageList.last.setStatus =
-    //       MessageStatus.undelivered;
-    // });
-    // Future.delayed(const Duration(seconds: 1), () {
-    //   _chatController.initialMessageList.last.setStatus = MessageStatus.read;
-    // });
   }
 
   void _onViewImage(Message message) async{
@@ -206,7 +223,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
               overflow: TextOverflow.ellipsis,
             ),
             subtitle: Text(
-              "Online",
+              _isOnline ? "Online" : "Offline",
               style: TextStyle(color: Colors.white),
               overflow: TextOverflow.ellipsis,
             ),
@@ -229,7 +246,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
               color: Colors.white,
               icon: Icons.more_vert,
               onPressed: () {
-                print(_chatController.initialMessageList);
               },
             ),
           ],
@@ -346,97 +362,4 @@ class _ConversationScreenState extends State<ConversationScreen> {
       ),
     );
   }
-}
-
-class Data {
-  // static const profileImage =
-  //     "https://res.cloudinary.com/deynivwng/image/upload/v1736613310/Doctor%20Pill%20Storage/1736613306574_good-doctor.jpg.jpg";
-  // static final List<Message> messageList = [
-  //   // Message(
-  //   //   id: '1',
-  //   //   message: "Hi!",
-  //   //   createdAt: DateTime.now(),
-  //   //   sentBy: '1', // userId of who sends the message
-  //   //   status: MessageStatus.read,
-  //   //   messageType: MessageType.text
-  //   // ),
-  //   // Message(
-  //   //   id: '2',
-  //   //   message: "Hi!",
-  //   //   createdAt: DateTime.now(),
-  //   //   sentBy: '2',
-  //   //   status: MessageStatus.read,
-  //   // ),
-  //   // Message(
-  //   //   id: '3',
-  //   //   message: "We can meet?I am free",
-  //   //   createdAt: DateTime.now(),
-  //   //   sentBy: '1',
-  //   //   status: MessageStatus.read,
-  //   // ),
-  //   // Message(
-  //   //   id: '4',
-  //   //   message: "Can you write the time and place of the meeting?",
-  //   //   createdAt: DateTime.now(),
-  //   //   sentBy: '1',
-  //   //   status: MessageStatus.read,
-  //   // ),
-  //   // Message(
-  //   //   id: '5',
-  //   //   message: "That's fine",
-  //   //   createdAt: DateTime.now(),
-  //   //   sentBy: '2',
-  //   //   status: MessageStatus.read,
-  //   // ),
-  //   // Message(
-  //   //   id: '6',
-  //   //   message: "When to go ?",
-  //   //   createdAt: DateTime.now(),
-  //   //   sentBy: '1',
-  //   //   status: MessageStatus.read,
-  //   // ),
-  //   // Message(
-  //   //   id: '7',
-  //   //   message: "I guess Simform will reply",
-  //   //   createdAt: DateTime.now(),
-  //   //   sentBy: '2',
-  //   //   status: MessageStatus.read,
-  //   // ),
-  //   // Message(
-  //   //   id: '8',
-  //   //   message: "https://bit.ly/3JHS2Wl",
-  //   //   createdAt: DateTime.now(),
-  //   //   sentBy: '2',
-  //   //   status: MessageStatus.read,
-  //   // ),
-  //   // Message(
-  //   //   id: '9',
-  //   //   message: "Done",
-  //   //   createdAt: DateTime.now(),
-  //   //   sentBy: '1',
-  //   //   status: MessageStatus.read,
-  //   // ),
-  //   // Message(
-  //   //   id: '10',
-  //   //   message: "Thank you!!",
-  //   //   status: MessageStatus.read,
-  //   //   createdAt: DateTime.now(),
-  //   //   sentBy: '1',
-  //   // ),
-  //   // Message(
-  //   //   id: '11',
-  //   //   message: "https://miro.medium.com/max/1000/0*s7of7kWnf9fDg4XM.jpeg",
-  //   //   createdAt: DateTime.now(),
-  //   //   messageType: MessageType.image,
-  //   //   sentBy: '1',
-  //   //   status: MessageStatus.read,
-  //   // ),
-  //   // Message(
-  //   //   id: '12',
-  //   //   message: "🤩🤩",
-  //   //   createdAt: DateTime.now(),
-  //   //   sentBy: '2',
-  //   //   status: MessageStatus.read,
-  //   // ),
-  // ];
 }
