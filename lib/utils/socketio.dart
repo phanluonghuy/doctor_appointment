@@ -68,6 +68,6 @@ class SocketService {
   }
 
   static void disconnect() {
-    socket.disconnect();
+    socket.dispose();
   }
 }

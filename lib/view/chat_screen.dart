@@ -42,11 +42,17 @@ class _ChatScreenState extends State<ChatScreen> {
 
    List<Widget> buildDoctorsListRow(double height, double width) {
      final doctorViewModel = context.read<DoctorViewModel>();
-    List<Doctor> onlineDoctor = doctorViewModel.doctors
-        .where((doctor) => SocketService.usersOnline.contains(doctor.id))
-        .toSet().toList();
+     List<Doctor> onlineDoctor = doctorViewModel.doctors
+         .where((doctor) => SocketService.usersOnline.contains(doctor.id))
+         .fold<Map<String, Doctor>>({}, (map, doctor) {
+       map[doctor.id] = doctor;
+       return map;
+     })
+         .values
+         .toList();
 
-    return onlineDoctor.isEmpty ? [Center(
+
+     return onlineDoctor.isEmpty ? [Center(
       child: Text(
         "No doctors available",
         style: TextStyle(
