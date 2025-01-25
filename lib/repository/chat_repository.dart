@@ -24,4 +24,14 @@ class ChatRepository {
       rethrow; //Big Brain
     }
   }
+
+  Future<ApiResponse> createConversation(dynamic data) async {
+    try {
+      final response =
+      await _network.getPostApiResponse(AppUrls.createConversation, data);
+      return response;
+    } catch (e) {
+      rethrow; //Big Brain
+    }
+  }
 }

@@ -3,14 +3,13 @@ import 'dart:convert';
 import 'package:doctor_appointment/repository/chat_repository.dart';
 import 'package:doctor_appointment/utils/socketio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http_parser/http_parser.dart';
 
 import '../models/chatModel.dart';
 import '../res/widgets/app_urls.dart';
 import '../utils/utils.dart';
 import 'package:http/http.dart' as http;
-
-
 
 class ChatViewModel with ChangeNotifier {
   final _chatRepo = ChatRepository();
@@ -30,13 +29,16 @@ class ChatViewModel with ChangeNotifier {
       final value = await _chatRepo.getConversationsByUserId(id);
 
       if (value.acknowledgement == false) {
-        Utils.flushBarErrorMessage(value.description ?? "An error occurred.", context);
+        Utils.flushBarErrorMessage(
+            value.description ?? "An error occurred.", context);
         return;
       }
 
       conversations.clear();
       conversations.addAll(
-        (value.data as List).map((conversation) => Conversation.fromJson(conversation)).toList(),
+        (value.data as List)
+            .map((conversation) => Conversation.fromJson(conversation))
+            .toList(),
       );
     } catch (error) {
       Utils.flushBarErrorMessage(error.toString(), context);
@@ -47,7 +49,7 @@ class ChatViewModel with ChangeNotifier {
   }
 
   Future<void> updateConversation(String id, BuildContext context) async {
-    final value = await _chatRepo.updateConversationById(id);
+    await _chatRepo.updateConversationById(id);
   }
 
   Future<String> uploadImage(String filePath) async {
@@ -68,4 +70,28 @@ class ChatViewModel with ChangeNotifier {
     return responseJson['data'];
   }
 
+  Conversation? getConversation(String from, String to) {
+    Conversation? existConversation = conversations.firstWhereOrNull(
+      (conversation) {
+        final participantIds =
+            conversation.participants?.map((user) => user.id).toList() ?? [];
+        return participantIds.contains(from) && participantIds.contains(to) && from != to;
+      },
+    );
+
+    return existConversation;
+  }
+
+  Future<void> createConversation(String from, String to, BuildContext context) async {
+    try {
+      setLoading(true);
+      Map<String, dynamic> data = {"userId1": from, "userId2": to};
+      await _chatRepo.createConversation(data);
+    } catch (error) {
+      Utils.flushBarErrorMessage(error.toString(), context);
+      print(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 }

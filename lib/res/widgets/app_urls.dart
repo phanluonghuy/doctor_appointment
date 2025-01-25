@@ -27,6 +27,7 @@ class AppUrls {
   static var getConversationsByUserId = (String userId) => "$baseUrl/conversation/$userId";
   static const uploadFileImage = "$baseUrl/conversation/image";
   static var getUpdateConversation = (String conversationId) => "$baseUrl/conversation/update/$conversationId/update";
+  static const createConversation = "$baseUrl/conversation";
 }
 
 //testerpayment@test.com

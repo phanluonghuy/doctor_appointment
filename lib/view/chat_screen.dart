@@ -37,66 +37,84 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _handleEnterConversation(Conversation conversation) {
-    context.push('/chat/conversation', extra: conversation,);
-  }
-
-   List<Widget> buildDoctorsListRow(double height, double width) {
-     final doctorViewModel = context.read<DoctorViewModel>();
-     List<Doctor> onlineDoctor = doctorViewModel.doctors
-         .where((doctor) => SocketService.usersOnline.contains(doctor.id))
-         .fold<Map<String, Doctor>>({}, (map, doctor) {
-       map[doctor.id] = doctor;
-       return map;
-     })
-         .values
-         .toList();
-
-
-     return onlineDoctor.isEmpty ? [Center(
-      child: Text(
-        "No doctors available",
-        style: TextStyle(
-          color: Colors.grey,
-          fontSize: 16,
-        ),
-      ),
-    )] : List.generate(
-      onlineDoctor.length,
-          (index) {
-        final doctor = onlineDoctor[index];
-        return CachedNetworkImage(
-          imageUrl: doctor.avatar.url,
-          imageBuilder: (context, imageProvider) => Container(
-            width: height * 0.06,
-            height: height * 0.06,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                image: imageProvider,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          placeholder: (context, url) => Center(
-            child: CircularProgressIndicator(),
-          ),
-          errorWidget: (context, url, error) => CircleAvatar(
-            radius: height * 0.03,
-            child: Icon(
-              Icons.person,
-              color: Colors.grey.shade800,
-              size: height * 0.03,
-            ),
-          ),
-        );
-      },
+    context.push(
+      '/chat/conversation',
+      extra: conversation,
     );
   }
 
+  void _createConversation(String from, String to) async{
+    final chatViewModel = context.read<ChatViewModel>();
+    Conversation? existedConversation = chatViewModel.getConversation(from, to);
+    if (existedConversation != null) {
+      _handleEnterConversation(existedConversation);
+    } else {
+      final chatViewModel = context.read<ChatViewModel>();
+      await chatViewModel.createConversation(from, to, context);
+      final userViewModel = context.read<UserViewModel>();
+      await chatViewModel.getConversationsByUserId(userViewModel.user!.id, context);
+      Conversation? existed = chatViewModel.getConversation(from, to);
+      if (existed != null) _handleEnterConversation(existed);
+    }
+  }
 
-  Widget buildDoctorsListColumn(double height, double width, Conversation conversation) {
+  List<Widget> buildDoctorsListRow(double height, double width) {
+    var doctorViewModel = context.watch<DoctorViewModel>();
+    List<Doctor> doctors = doctorViewModel.doctors;
+    return doctors.isEmpty
+        ? [
+            Center(
+              child: Text(
+                "No doctors available",
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16,
+                ),
+              ),
+            )
+          ]
+        : List.generate(
+            doctors.length,
+            (index) {
+              final doctor = doctors[index];
+              return InkWell(
+                onTap: () => _createConversation(doctor.id, context.read<UserViewModel>().user!.id),
+                child: CachedNetworkImage(
+                  imageUrl: doctor.avatar.url,
+                  imageBuilder: (context, imageProvider) => Container(
+                    width: height * 0.06,
+                    height: height * 0.06,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  placeholder: (context, url) => Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  errorWidget: (context, url, error) => CircleAvatar(
+                    radius: height * 0.03,
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.grey.shade800,
+                      size: height * 0.03,
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+  }
+
+  Widget buildDoctorsListColumn(
+      double height, double width, Conversation conversation) {
     final userViewModel = context.read<UserViewModel>();
-    final User otherUser = conversation.participants!.where((user) => user.id != userViewModel.user!.id).first;
+    final User otherUser = conversation.participants!
+        .where((user) => user.id != userViewModel.user!.id)
+        .first;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -123,7 +141,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   ),
                   placeholder: (context, url) =>
-                  const Center(child: CircularProgressIndicator()),
+                      const Center(child: CircularProgressIndicator()),
                   errorWidget: (context, url, error) => CircleAvatar(
                     child: Icon(
                       Icons.person,
@@ -139,7 +157,9 @@ class _ChatScreenState extends State<ChatScreen> {
                     height: height * 0.01,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: SocketService.isUserOnline(otherUser.id) ? Colors.green : Colors.grey,
+                      color: SocketService.isUserOnline(otherUser.id)
+                          ? Colors.green
+                          : Colors.grey,
                       border: Border.all(
                         color: Colors.white,
                         width: 1,
@@ -173,7 +193,6 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -225,32 +244,35 @@ class _ChatScreenState extends State<ChatScreen> {
             children: [
               // Row(),
               SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: chatViewModel.loading
-                    ? Center(child: CircularProgressIndicator())
-                    : Row(
-                  spacing: 16,
-                  children: buildDoctorsListRow(height, width),
-                )),
+                  scrollDirection: Axis.horizontal,
+                  child: chatViewModel.loading
+                      ? Center(child: CircularProgressIndicator())
+                      : Row(
+                          spacing: 16,
+                          children: buildDoctorsListRow(height, width),
+                        )),
+
               chatViewModel.loading
                   ? Expanded(child: Center(child: CircularProgressIndicator()))
                   : (conversations.isEmpty
-                  ? Expanded(
-                    child: Center(
-                                    child: Text(
-                    "No conversations yet",
-                    style: TextStyle(color: Colors.grey, fontSize: 16),
-                                    ),
-                                  ),
-                  )
-                  : Expanded(
-                    child: ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: conversations.length,
-                                    itemBuilder: (context, index) =>
-                      buildDoctorsListColumn(height, width, conversations[index]),
-                                  ),
-                  ))
+                      ? Expanded(
+                          child: Center(
+                            child: Text(
+                              "No conversations yet",
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 16),
+                            ),
+                          ),
+                        )
+                      : Expanded(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: conversations.length,
+                            itemBuilder: (context, index) =>
+                                buildDoctorsListColumn(
+                                    height, width, conversations[index]),
+                          ),
+                        ))
             ],
           ),
         ),
