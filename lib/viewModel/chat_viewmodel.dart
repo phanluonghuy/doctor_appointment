@@ -1,6 +1,9 @@
 import 'dart:convert';
 
+import 'package:chatview/chatview.dart';
+import 'package:doctor_appointment/models/doctorModel.dart';
 import 'package:doctor_appointment/repository/chat_repository.dart';
+import 'package:doctor_appointment/repository/doctor_repository.dart';
 import 'package:doctor_appointment/utils/socketio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,14 +16,43 @@ import 'package:http/http.dart' as http;
 
 class ChatViewModel with ChangeNotifier {
   final _chatRepo = ChatRepository();
+  final _doctorRepository = DoctorRepository();
 
   List<Conversation> conversations = [];
+  List<Doctor> doctors = [];
+  List<Doctor> get getDoctors => doctors;
 
   bool _loading = false;
   bool get loading => _loading;
   void setLoading(bool value) {
     _loading = value;
     notifyListeners();
+  }
+
+  ChatViewState _chatViewState = ChatViewState.loading;
+  ChatViewState get chatViewState => _chatViewState;
+  void setChatViewState(ChatViewState value) {
+    _chatViewState = value;
+    notifyListeners();
+  }
+
+  Future<void> getAllDoctors(BuildContext context) async {
+    setLoading(true);
+    _doctorRepository.getAllDoctors().then((value) {
+      setLoading(false);
+      if (value.acknowledgement == false) {
+        Utils.flushBarErrorMessage(value.description ?? "", context);
+        return;
+      }
+      doctors.clear();
+      value.data.forEach((doctor) {
+        doctors.add(Doctor.fromJson(doctor));
+      });
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(error.toString(), context, isBottom: false);
+      print(error);
+      setLoading(false);
+    });
   }
 
   Future<void> getConversationsByUserId(String id, BuildContext context) async {

@@ -23,10 +23,11 @@ class _ChatScreenState extends State<ChatScreen> {
   TextEditingController searchController = TextEditingController();
 
   void init() async {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
       final userViewModel = context.read<UserViewModel>();
       final chatViewModel = context.read<ChatViewModel>();
-      chatViewModel.getConversationsByUserId(userViewModel.user!.id, context);
+      await chatViewModel.getConversationsByUserId(userViewModel.user!.id, context);
+      await chatViewModel.getAllDoctors(context);
     });
   }
 
@@ -59,8 +60,8 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   List<Widget> buildDoctorsListRow(double height, double width) {
-    var doctorViewModel = context.watch<DoctorViewModel>();
-    List<Doctor> doctors = doctorViewModel.doctors;
+    final chatViewModel = context.read<ChatViewModel>();
+    List<Doctor> doctors = chatViewModel.doctors;
     return doctors.isEmpty
         ? [
             Center(

@@ -30,6 +30,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
   late User currentUser;
   late User otherUser;
   late bool _isOnline = false;
+  late ChatViewState _chatViewState = ChatViewState.loading;
 
   @override
   void dispose() {
@@ -111,6 +112,14 @@ class _ConversationScreenState extends State<ConversationScreen> {
   }
 
   void loadHistory(dynamic data) {
+    if (!mounted) return;
+
+    setState(() {
+      _chatViewState = (data as List).isEmpty
+          ? ChatViewState.noData
+          : ChatViewState.hasMessages;
+    });
+
     data.forEach((message) {
       final messageId = message['_id'] as String;
 
@@ -252,7 +261,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
         ),
         chatController: _chatController,
         onSendTap: _onSendTap,
-        chatViewState: ChatViewState.hasMessages,
+        chatViewState: _chatViewState,
         featureActiveConfig: const FeatureActiveConfig(
           lastSeenAgoBuilderVisibility: true,
           receiptsBuilderVisibility: true,
