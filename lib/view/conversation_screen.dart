@@ -335,6 +335,9 @@ class _ConversationScreenState extends State<ConversationScreen> {
             color: AppColors.primaryColor,
             senderNameTextStyle:
                 TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            onMessageRead: (message) {
+              message.setStatus = MessageStatus.read;
+            },
           ),
           inComingChatBubbleConfig: ChatBubble(
             borderRadius: BorderRadius.circular(8),
@@ -349,8 +352,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
             ),
             textStyle: TextStyle(color: Colors.black),
             onMessageRead: (message) {
-              /// send your message reciepts to the other client
-              debugPrint('Message Read');
+              message.setStatus = MessageStatus.read;
             },
             senderNameTextStyle:
                 TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
