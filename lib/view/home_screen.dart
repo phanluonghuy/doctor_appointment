@@ -117,8 +117,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 } else if (snapshot.hasError) {
                   return Center(
                     child: Text(
-                      "Error: ${snapshot.error}",
-                      style: TextStyle(color: Colors.red),
+                      "No appointments found.",
+                      style: TextStyle(fontSize: 16),
                     ),
                   );
                 } else if (!snapshot.hasData) {
