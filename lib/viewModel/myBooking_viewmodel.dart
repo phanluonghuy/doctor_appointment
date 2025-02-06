@@ -16,13 +16,13 @@ class MyBookingViewModel with ChangeNotifier {
   List<Appointment> get appointments => _appointments;
 
   List<Appointment> get confirmedAppointments =>
-      _appointments.where((element) => element.status == "confirmed").toList();
+      _appointments.where((element) => element.status == "confirmed").toList().reversed.toList();
   List<Appointment> get pendingAppointments =>
-      _appointments.where((element) => element.status == "pending").toList();
+      _appointments.where((element) => element.status == "pending").toList().reversed.toList();
   List<Appointment> get completedAppointments =>
-      _appointments.where((element) => element.status == "completed").toList();
+      _appointments.where((element) => element.status == "completed").toList().reversed.toList();
   List<Appointment> get cancelledAppointments =>
-      _appointments.where((element) => element.status == "cancelled").toList();
+      _appointments.where((element) => element.status == "cancelled").toList().reversed.toList();
 
   void setLoading(bool value) {
     _loading = value;

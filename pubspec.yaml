@@ -59,6 +59,7 @@ dependencies:
       ref: main
   photo_view: ^0.15.0
   socket_io_client: ^3.0.2
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:

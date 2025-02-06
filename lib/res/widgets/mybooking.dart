@@ -2,9 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/get_utils.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/appointmentModel.dart';
+import '../../viewModel/myBooking_viewmodel.dart';
 import '../texts/app_text.dart';
 import 'buttons/primaryButton.dart';
 import 'buttons/whitePrimaryButton.dart';
@@ -279,7 +282,7 @@ class MyBookingCompleteCard extends StatelessWidget {
             children: [
               Expanded(
                   child: OutlinePrimaryButton(
-                      text: "Re-Book",
+                      text: "Medical Record",
                       textStyle: TextStyle(
                           fontSize: 16.0, color: AppColors.primaryColor),
                       onPressed: () {})),
@@ -287,7 +290,9 @@ class MyBookingCompleteCard extends StatelessWidget {
               Expanded(
                   child: PrimaryButton(
                       text: "Add Review",
-                      onPressed: () {},
+                      onPressed: () {
+                        context.push('/add-review/${appointment.doctorId}');
+                      },
                       fontSize: 16.0,
                       context: context))
             ],

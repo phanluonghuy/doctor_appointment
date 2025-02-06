@@ -1,4 +1,5 @@
 import 'package:doctor_appointment/models/chatModel.dart';
+import 'package:doctor_appointment/view/add_review_screen.dart';
 import 'package:doctor_appointment/view/booking_screen.dart';
 import 'package:doctor_appointment/view/chat_screen.dart';
 import 'package:doctor_appointment/view/doctorBooking/selectBookingTime_screen.dart';
@@ -100,6 +101,12 @@ final GoRouter router = GoRouter(
     GoRoute(
         path: '/successBooking',
         builder: (context, state) => const SuccessBookingScreen()),
+    GoRoute(
+        path: '/add-review/:id',
+        builder: (context, state) {
+          final doctorId = state.pathParameters['id'] ?? "";
+          return AddReviewScreen(doctorId: doctorId);
+        }),
   ],
   errorBuilder: (context, state) => const Scaffold(
     body: Center(

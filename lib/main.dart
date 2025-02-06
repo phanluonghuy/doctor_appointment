@@ -4,6 +4,7 @@ import 'package:doctor_appointment/viewModel/chat_viewmodel.dart';
 import 'package:doctor_appointment/viewModel/doctorBooking_viewmodel.dart';
 import 'package:doctor_appointment/viewModel/doctor_viewmodel.dart';
 import 'package:doctor_appointment/viewModel/myBooking_viewmodel.dart';
+import 'package:doctor_appointment/viewModel/rating_review_viewmodel.dart';
 import 'package:doctor_appointment/viewModel/signup_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:doctor_appointment/utils/routes.dart';
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => RatingReviewViewmodel()),
         ChangeNotifierProvider(create: (_) => ChatViewModel()),
         ChangeNotifierProvider(create: (_) => AuthViewModel(),lazy: true),
         ChangeNotifierProvider(create: (_) => UserViewModel()),
