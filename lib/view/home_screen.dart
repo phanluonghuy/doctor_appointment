@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:doctor_appointment/models/appointmentModel.dart';
 import 'package:doctor_appointment/models/doctorModel.dart';
 import 'package:doctor_appointment/repository/doctor_repository.dart';
 import 'package:doctor_appointment/res/texts/app_text.dart';
@@ -25,7 +26,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController searchController = TextEditingController();
-  DoctorRepository _doctorRepository = DoctorRepository();
+  final DoctorRepository _doctorRepository = DoctorRepository();
   @override
   void initState() {
     super.initState();
@@ -108,7 +109,31 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-            HomeBanner1(),
+            FutureBuilder<Appointment>(
+              future: _doctorRepository.getNearestAppointment(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                      "No appointments found.",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  );
+                } else if (!snapshot.hasData) {
+                  return Center(
+                    child: Text(
+                      "No appointments found.",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  );
+                } else {
+                  final appointment = snapshot.data!;
+                  return HomeBanner1(appointment: appointment);
+                }
+              },
+            ),
             SizedBox(height: height * 0.02),
             Row(
               children: [
