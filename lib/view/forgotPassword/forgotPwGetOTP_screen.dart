@@ -124,6 +124,7 @@ class _GetOTPState extends State<GetOTP> {
                     _otp = v;
                   },
                   onTap: _scrollToFocusedWidget,
+                  textInputAction: TextInputAction.done,
                 ),
                 SizedBox(height: height * 0.02),
                 Text("Didn't receive OTP?"),

@@ -58,6 +58,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
+                textInputAction: TextInputAction.next,
+                onTapOutside: (event) {
+                  FocusScope.of(context).unfocus();
+                },
               ),
               SizedBox(height: height * 0.03),
               Align(alignment: Alignment.centerLeft, child: Text("Email")),
@@ -76,6 +80,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
+                textInputAction: TextInputAction.done,
+                onTapOutside: (event) {
+                  FocusScope.of(context).unfocus();
+                },
               ),
               Row(
                 children: [

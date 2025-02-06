@@ -230,6 +230,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
+                textInputAction: TextInputAction.done,
+                onTapOutside: (event) {
+                  FocusScope.of(context).unfocus();
+                },
               ),
               SizedBox(height: height * 0.02),
               Align(
@@ -318,6 +322,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
+                textInputAction: TextInputAction.done,
+                onTapOutside: (event) {
+                  FocusScope.of(context).unfocus();
+                },
               ),
               SizedBox(height: height * 0.02),
               Align(

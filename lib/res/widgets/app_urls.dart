@@ -1,5 +1,6 @@
 class AppUrls {
-  static const baseUrl = "http://10.0.2.2:8080/api";
+  static const socketUrl = "ws://192.168.1.13:8080";
+  static const baseUrl = "http://192.168.1.13:8080/api";
   static const loginEndPoint = "$baseUrl/user/sign-in";
   static const registerEndPoint = "$baseUrl/user/sign-up";
   static const sendOTP = "$baseUrl/user/getOTP";
@@ -22,6 +23,11 @@ class AppUrls {
       (String patientId) => "$baseUrl/appointment/patient/$patientId";
 
   static const createPayment = "$baseUrl/payment";
+
+  static var getConversationsByUserId = (String userId) => "$baseUrl/conversation/$userId";
+  static const uploadFileImage = "$baseUrl/conversation/image";
+  static var getUpdateConversation = (String conversationId) => "$baseUrl/conversation/update/$conversationId/update";
+  static const createConversation = "$baseUrl/conversation";
   static const getNearestAppointment = "$baseUrl/appointment/appointment/nearest";
 }
 

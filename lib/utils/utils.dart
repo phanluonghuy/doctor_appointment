@@ -1,7 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:another_flushbar/flushbar.dart';
 import 'package:another_flushbar/flushbar_route.dart';
+import 'package:chatview/chatview.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class Utils {
 // ! It contains all the utilities which help you in your project
@@ -84,4 +90,26 @@ class Utils {
 
     return avg;
   }
+
+  static String formatTimestamp(DateTime timestamp) {
+    return DateFormat('hh:mm a').format(timestamp);
+  }
+
+  static MessageType getMessageType(String messageType) {
+    switch (messageType) {
+      case 'text': return MessageType.text;
+      case 'image': return MessageType.image;
+      default: return MessageType.text;
+    }
+  }
+
+  static MessageStatus getMessageStatus(String status) {
+    switch (status) {
+      case 'read': return MessageStatus.read;
+      case 'delivered': return MessageStatus.delivered;
+      case 'sent': return MessageStatus.pending;
+      default: return MessageStatus.pending;
+    }
+  }
+
 }

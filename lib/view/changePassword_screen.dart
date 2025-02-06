@@ -87,6 +87,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             },
                           ),
                         ),
+                        textInputAction: TextInputAction.next,
+                        onTapOutside: (event) {
+                          FocusScope.of(context).unfocus();
+                        },
                       );
                     },
                   ),
@@ -118,6 +122,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             },
                           ),
                         ),
+                        textInputAction: TextInputAction.next,
+                        onTapOutside: (event) {
+                          FocusScope.of(context).unfocus();
+                        },
                       );
                     },
                   ),
@@ -149,6 +157,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             },
                           ),
                         ),
+                        textInputAction: TextInputAction.done,
+                        onTapOutside: (event) {
+                          FocusScope.of(context).unfocus();
+                        },
                       );
                     },
                   ),

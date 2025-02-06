@@ -82,6 +82,7 @@ class _SignUpVerifyOTPScreenState extends State<SignUpVerifyOTPScreen> {
                 onCompleted: (v) {
                   _otp = v;
                 },
+                textInputAction: TextInputAction.done,
               ),
               SizedBox(height: height * 0.02),
               Text("Didn't receive OTP?"),
