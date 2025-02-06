@@ -28,6 +28,7 @@ class AppUrls {
   static const uploadFileImage = "$baseUrl/conversation/image";
   static var getUpdateConversation = (String conversationId) => "$baseUrl/conversation/update/$conversationId/update";
   static const createConversation = "$baseUrl/conversation";
+  static const getNearestAppointment = "$baseUrl/appointment/appointment/nearest";
 }
 
 //testerpayment@test.com

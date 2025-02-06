@@ -1,7 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:doctor_appointment/models/appointmentModel.dart';
 import 'package:doctor_appointment/res/widgets/coloors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 class HomeBanner1 extends StatelessWidget {
+  final Appointment appointment;
+  const HomeBanner1({super.key, required this.appointment});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,16 +30,16 @@ class HomeBanner1 extends StatelessWidget {
           ListTile(
             leading: CircleAvatar(
               radius: 30,
-              backgroundImage: AssetImage('assets/illustrations/doctor-3d.png'),
+              backgroundImage: appointment.doctorAvatarUrl != null && appointment.doctorAvatarUrl!.isNotEmpty
+                  ? CachedNetworkImageProvider(appointment.doctorAvatarUrl!)
+                  : AssetImage('assets/illustrations/doctor-3d.png') as ImageProvider, // Fallback image
             ),
-            title: Text('Dr John Doe', style: TextStyle(color: Colors.white)),
-            subtitle: Text('Dentist Consultant', style: TextStyle(color: Colors.white)),
-            trailing: IconButton(
-              icon: Icon(Icons.more_vert, color: Colors.white),
-              onPressed: () {
 
-              },
-            ),
+            title: Text('Dr ${appointment.doctorName}',
+                style: TextStyle(color: Colors.white)),
+            subtitle: Text(
+                'Priority : ${toBeginningOfSentenceCase(appointment.priority)}',
+                style: TextStyle(color: Colors.white)),
           ),
           SizedBox(height: 16),
           Container(
@@ -45,10 +52,11 @@ class HomeBanner1 extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.calendar_month_outlined, color: Colors.white),
-                Text('Monday, 26 July', style: TextStyle(color: Colors.white)),
-                Container(height: 20, child: VerticalDivider(color: Colors.white)),
-                Icon(Icons.watch_later_outlined, color: Colors.white),
-                Text('10:00 - 12:00', style: TextStyle(color: Colors.white)),
+                Text(DateFormat('EEEE, dd MMM').format(appointment.appointmentDate), style: TextStyle(color: Colors.white)),
+                SizedBox(
+                    height: 20, child: VerticalDivider(color: Colors.white)),
+                Icon(Icons.numbers, color: Colors.white),
+                Text('Number : ${appointment.queueNumber.toString()}', style: TextStyle(color: Colors.white)),
               ],
             ),
           )

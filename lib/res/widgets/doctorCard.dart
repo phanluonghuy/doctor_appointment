@@ -37,30 +37,17 @@ class DoctorInfo extends StatelessWidget {
                 children: [
                   Stack(
                     children: [
-                      CachedNetworkImage(
-                        imageUrl: url,
-                        imageBuilder: (context, imageProvider) => Container(
-                          width: 100,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: imageProvider,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ),
-                        placeholder: (context, url) =>
-                            Center(child: CircularProgressIndicator()),
-                        errorWidget: (context, url, error) => Icon(
-                          Icons.person,
-                          size: height * 0.08,
-                          color: Colors.grey.shade800,
-                        ),
+                      CircleAvatar(
+                        radius: height * 0.06,
+                        backgroundImage: url.isNotEmpty
+                            ? CachedNetworkImageProvider(url)
+                            : AssetImage('assets/illustrations/doctor-3d.png')
+                                as ImageProvider, // Fallback image
                       ),
                       Positioned(
                           right: 0,
-                          bottom: height * 0.02,
-                          child: Icon(Icons.verified,
+                          bottom: 0,
+                          child: Icon(Icons.verified_sharp,
                               color: AppColors.primaryColor,
                               size: height * 0.04)),
                     ],

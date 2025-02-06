@@ -55,16 +55,16 @@ class _BookingScreenState extends State<BookingScreen> {
               ),
             ],
           ),
-          centerTitle: true,
+          // centerTitle: true,
           automaticallyImplyLeading: false,
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 18),
-            child: CustomBackButton(
-              onPressed: () {
-                context.pop();
-              },
-            ),
-          ),
+          // leading: Padding(
+          //   padding: const EdgeInsets.only(left: 18),
+          //   child: CustomBackButton(
+          //     onPressed: () {
+          //       context.pop();
+          //     },
+          //   ),
+          // ),
           actions: [
             Container(
               height: 40,

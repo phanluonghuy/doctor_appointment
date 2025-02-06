@@ -2,6 +2,7 @@ import 'package:doctor_appointment/data/network/network_api_services.dart';
 import 'package:doctor_appointment/models/doctorModel.dart';
 
 import '../data/response/api_response.dart';
+import '../models/appointmentModel.dart';
 import '../res/widgets/app_urls.dart';
 
 class DoctorRepository {
@@ -60,6 +61,19 @@ class DoctorRepository {
         doctors.add(Doctor.fromJson(element));
       });
       return doctors;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Appointment> getNearestAppointment() async {
+    try {
+      final response = await _network.getGetApiResponse(
+          AppUrls.getNearestAppointment, true);
+      if (response.acknowledgement == false) {
+        throw Exception(response.description);
+      }
+      return Appointment.fromJson(response.data);
     } catch (e) {
       rethrow;
     }
