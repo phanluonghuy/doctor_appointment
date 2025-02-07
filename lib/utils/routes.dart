@@ -15,6 +15,7 @@ import 'package:doctor_appointment/view/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 import '../res/navigations/navigationMenu.dart';
 import '../view/changePassword_screen.dart';
+import '../view/completeBookingDetails_screen.dart';
 import '../view/conversation_screen.dart';
 import '../view/doctorBooking/doctorBookingMain_screen.dart';
 import '../view/doctorBooking/paymentBooking_screen.dart';
@@ -59,7 +60,11 @@ final GoRouter router = GoRouter(
     GoRoute(
         path: '/explore', builder: (context, state) => const ExploreScreen()),
     GoRoute(
-        path: '/booking', builder: (context, state) => const BookingScreen()),
+        path: '/booking', builder: (context, state) => const BookingScreen(),
+      routes: [
+        GoRoute(path: '/completeBookingDetails', builder: (context, state) => const CompleteBookingDetailsScreen()),
+      ]
+    ),
     GoRoute(
         path: '/chat',
         builder: (context, state) => const ChatScreen(),

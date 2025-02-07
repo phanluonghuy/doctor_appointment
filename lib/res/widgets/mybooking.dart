@@ -2,9 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/get_utils.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/appointmentModel.dart';
+import '../../viewModel/bookingViewDetails_viewmodel.dart';
 import '../texts/app_text.dart';
 import 'buttons/primaryButton.dart';
 import 'buttons/whitePrimaryButton.dart';
@@ -279,10 +282,15 @@ class MyBookingCompleteCard extends StatelessWidget {
             children: [
               Expanded(
                   child: OutlinePrimaryButton(
-                      text: "Re-Book",
+                      text: "View Details",
                       textStyle: TextStyle(
                           fontSize: 16.0, color: AppColors.primaryColor),
-                      onPressed: () {})),
+                      onPressed: () {
+                        context
+                            .read<BookingViewDetailsViewModel>()
+                            .appointment = appointment;
+                        context.push('/booking/completeBookingDetails');
+                      })),
               SizedBox(width: 8),
               Expanded(
                   child: PrimaryButton(
