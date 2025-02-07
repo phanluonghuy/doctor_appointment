@@ -29,6 +29,10 @@ class AppUrls {
   static var getUpdateConversation = (String conversationId) => "$baseUrl/conversation/update/$conversationId/update";
   static const createConversation = "$baseUrl/conversation";
   static const getNearestAppointment = "$baseUrl/appointment/appointment/nearest";
+  static var getAppointmentDetails = (String id) => "$baseUrl/appointment/getAppointmentDetails/$id";
+
+  static var getScheduleMedicines = (String patientId) => "$baseUrl/notification/user/$patientId";
+
 
   static const addRatingReview = "$baseUrl/rating-review/";
   static var getRatingReviews = (String doctorId) => "$baseUrl/rating-review/doctor/$doctorId";

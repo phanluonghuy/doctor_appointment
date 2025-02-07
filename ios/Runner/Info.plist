@@ -49,6 +49,14 @@
 		<string>Doctor Pill need permission to access your camera</string>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>Doctor Pill need permission to access your gallery</string>
+		<key>NSUserNotificationsUsageDescription</key>
+        <string>Doctor Pill will send notifications.</string>
+        <key>PermissionGroupNotification</key>
+        <string>Doctor Pill will send notifications.</string>
+        <key>UIBackgroundModes</key>
+        <array>
+            <string>remote-notification</string>
+        </array>
 		<key>UIStatusBarHidden</key>
 		<false/>
 	</dict>

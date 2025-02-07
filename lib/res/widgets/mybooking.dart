@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/appointmentModel.dart';
+import '../../viewModel/bookingViewDetails_viewmodel.dart';
 import '../../viewModel/myBooking_viewmodel.dart';
 import '../texts/app_text.dart';
 import 'buttons/primaryButton.dart';
@@ -282,10 +283,15 @@ class MyBookingCompleteCard extends StatelessWidget {
             children: [
               Expanded(
                   child: OutlinePrimaryButton(
-                      text: "Medical Record",
+                      text: "View Details",
                       textStyle: TextStyle(
                           fontSize: 16.0, color: AppColors.primaryColor),
-                      onPressed: () {})),
+                      onPressed: () {
+                        context
+                            .read<BookingViewDetailsViewModel>()
+                            .appointment = appointment;
+                        context.push('/booking/completeBookingDetails');
+                      })),
               SizedBox(width: 8),
               Expanded(
                   child: PrimaryButton(
