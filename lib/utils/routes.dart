@@ -4,6 +4,7 @@ import 'package:doctor_appointment/view/booking_screen.dart';
 import 'package:doctor_appointment/view/chat_screen.dart';
 import 'package:doctor_appointment/view/doctorBooking/selectBookingTime_screen.dart';
 import 'package:doctor_appointment/view/explore_screen.dart';
+import 'package:doctor_appointment/view/filter_screen.dart';
 import 'package:doctor_appointment/view/forgotPassword/forgotPassword_screen.dart';
 import 'package:doctor_appointment/view/profile_screen.dart';
 import 'package:doctor_appointment/view/signUp/signup_verityOTP_screen.dart';
@@ -119,6 +120,14 @@ final GoRouter router = GoRouter(
           final doctorId = state.pathParameters['id'] ?? "";
           return AddReviewScreen(doctorId: doctorId);
         }),
+    GoRoute(
+      path: '/filter',
+      builder: (context, state) {
+        final currentFilter = state.extra as Map<String, dynamic>?; // Retrieve the extra parameter
+        return FilterScreen(currentFilter: currentFilter ?? {}); // Pass the currentFilter to the FilterScreen
+      },
+    ),
+
   ],
   errorBuilder: (context, state) => const Scaffold(
     body: Center(

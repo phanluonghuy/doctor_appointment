@@ -28,11 +28,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
     final doctorViewModel = context.read<DoctorViewModel>();
     doctor = doctorViewModel.doctors
         .firstWhere((doctor) => doctor.id == widget.doctorId);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context
-          .read<RatingReviewViewmodel>()
-          .getRatingReviews(widget.doctorId, context);
-    });
+    await context
+        .read<RatingReviewViewmodel>()
+        .getRatingReviews(widget.doctorId, context);
   }
 
   @override
@@ -42,12 +40,11 @@ class _ReviewScreenState extends State<ReviewScreen> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final ratingViewModel = context.watch<RatingReviewViewmodel>();
-
-    ;
 
     return Scaffold(
       appBar: AppBar(
@@ -62,18 +59,21 @@ class _ReviewScreenState extends State<ReviewScreen> {
         ),
         automaticallyImplyLeading: false,
       ),
-      body: Column(
-        spacing: 10,
+      body: ratingViewModel.isLoading
+          ? Center(
+        child: CircularProgressIndicator(),
+      )
+          : Column(
         children: [
           Stack(
             children: [
               CircleAvatar(
                 radius: height * 0.06,
-                backgroundImage:
-                    (doctor != null ? doctor!.avatar.url : "").isNotEmpty
-                        ? CachedNetworkImageProvider(doctor!.avatar.url)
-                        : AssetImage('assets/illustrations/doctor-3d.png')
-                            as ImageProvider, // Fallback image
+                backgroundImage: (doctor != null ? doctor!.avatar.url : "")
+                    .isNotEmpty
+                    ? CachedNetworkImageProvider(doctor!.avatar.url)
+                    : AssetImage('assets/illustrations/doctor-3d.png')
+                as ImageProvider,
               ),
               Positioned(
                   right: 0,
@@ -88,10 +88,11 @@ class _ReviewScreenState extends State<ReviewScreen> {
           ),
           Text(
             doctor?.specializations.first.specializations
-                    .join(" ")
-                    .toString() ??
+                .join(" ")
+                .toString() ??
                 "",
-            style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                color: Colors.grey, fontWeight: FontWeight.bold),
           ),
           Divider(
             height: 5,
@@ -101,13 +102,14 @@ class _ReviewScreenState extends State<ReviewScreen> {
           ),
           Text(
             "Overall rating: ${ratingViewModel.currentReview?.averageRating.toStringAsPrecision(3) ?? 0}",
-            style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                color: Colors.grey, fontWeight: FontWeight.bold),
           ),
           RatingBar.builder(
             initialRating:
-                (ratingViewModel.currentReview!.averageRating * 2).floor() /
-                        2 ??
-                    5,
+            ((ratingViewModel.currentReview?.averageRating ?? 5) * 2)
+                .floor() /
+                2,
             minRating: 1,
             direction: Axis.horizontal,
             allowHalfRating: true,
@@ -117,9 +119,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
               Icons.star,
               color: Colors.amber,
             ),
-            onRatingUpdate: (rating) {
-              // currentRating = rating.toInt();
-            },
+            onRatingUpdate: (rating) {},
+
           ),
           Divider(
             height: 5,
@@ -131,30 +132,32 @@ class _ReviewScreenState extends State<ReviewScreen> {
             child: ListView.builder(
               itemBuilder: (context, index) {
                 final Rating rating =
-                    ratingViewModel.currentReview!.ratings[index];
+                ratingViewModel.currentReview!.ratings[index];
                 return ListTile(
                   leading: SizedBox(
                     height: height * 0.05,
                     width: height * 0.05,
                     child: CachedNetworkImage(
-                      imageUrl: rating.patientId.avatar?.url ?? "" ,
-                      imageBuilder: (context, imageProvider) => Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.fitWidth,
+                      imageUrl: rating.patientId.avatar?.url ?? "",
+                      imageBuilder: (context, imageProvider) =>
+                          Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.fitWidth,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      placeholder: (context, url) =>
-                      const Center(child: CircularProgressIndicator()),
-                      errorWidget: (context, url, error) => CircleAvatar(
-                        child: Icon(
-                          Icons.person,
-                          color: Colors.grey.shade800,
-                        ),
-                      ),
+                      placeholder: (context, url) => const Center(
+                          child: CircularProgressIndicator()),
+                      errorWidget: (context, url, error) =>
+                          CircleAvatar(
+                            child: Icon(
+                              Icons.person,
+                              color: Colors.grey.shade800,
+                            ),
+                          ),
                     ),
                   ),
                   title: Text(
@@ -169,11 +172,13 @@ class _ReviewScreenState extends State<ReviewScreen> {
                   ),
                 );
               },
-              itemCount: ratingViewModel.currentReview?.ratings.length ?? 0,
+              itemCount:
+              ratingViewModel.currentReview?.ratings.length ?? 0,
             ),
           )
         ],
       ),
     );
   }
+
 }

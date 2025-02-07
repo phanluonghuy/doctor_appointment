@@ -10,6 +10,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../models/appointmentModel.dart';
 import '../res/widgets/buttons/backButton.dart';
 import '../res/widgets/mybooking.dart';
 
@@ -21,6 +22,8 @@ class BookingScreen extends StatefulWidget {
 }
 
 class _BookingScreenState extends State<BookingScreen> {
+  late Map<String, dynamic> currentFilter = {};
+
   @override
   void initState() {
     super.initState();
@@ -41,42 +44,30 @@ class _BookingScreenState extends State<BookingScreen> {
           title: const Text("My Booking"),
           bottom: const TabBar(
             tabs: <Widget>[
-              Tab(
-                text: "Confirmed",
-              ),
-              Tab(
-                text: "Pending",
-              ),
-              Tab(
-                text: "Completed",
-              ),
-              Tab(
-                text: "Cancelled",
-              ),
+              Tab(text: "Confirmed"),
+              Tab(text: "Pending"),
+              Tab(text: "Completed"),
+              Tab(text: "Cancelled"),
             ],
           ),
-          // centerTitle: true,
           automaticallyImplyLeading: false,
-          // leading: Padding(
-          //   padding: const EdgeInsets.only(left: 18),
-          //   child: CustomBackButton(
-          //     onPressed: () {
-          //       context.pop();
-          //     },
-          //   ),
-          // ),
           actions: [
-            Container(
-              height: 40,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.grey),
-                shape: BoxShape.circle,
-              ),
-              child: IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.search),
-              ),
+            IconButton(
+              onPressed: () async {
+                var filter = await context.push('/filter', extra: currentFilter);
+                if (filter != null) {
+                  setState(() {
+                    currentFilter = filter as Map<String, dynamic>;
+                    myBookingViewModel.setFilters(currentFilter);
+                  });
+                }
+              },
+              icon: const Icon(Icons.filter_alt_outlined),
+            ),
+            SizedBox(width: 10),
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.search),
             ),
             SizedBox(width: 10),
           ],

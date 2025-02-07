@@ -7,6 +7,7 @@ import '../utils/utils.dart';
 class RatingReviewViewmodel with ChangeNotifier {
   final _repo = RatingReviewRepository();
   Review? currentReview;
+  bool isLoading = false;
 
   Future<void> addRatingReview(dynamic data, BuildContext context) async {
     try {
@@ -18,21 +19,21 @@ class RatingReviewViewmodel with ChangeNotifier {
   }
 
   Future<void> getRatingReviews(String doctorId, BuildContext context) async {
+    isLoading = true;
+    notifyListeners();
+
     await _repo.getRatingReviews(doctorId).then((value) {
       if (value.acknowledgement == true) {
         currentReview = Review.fromJson(value.data);
-        return;
+      } else {
+        Utils.flushBarErrorMessage("Error", context);
       }
-      Utils.flushBarErrorMessage("Error", context);
-    }).onError((error, stackTrace) {
+    }).catchError((error) {
       Utils.flushBarErrorMessage(error.toString(), context);
       print(error);
     });
-    // try {
-    //   await _repo.getRatingReviews(doctorId);
-    // } catch (error) {
-    //   Utils.flushBarErrorMessage(error.toString(), context);
-    //   print(error);
-    // }
+
+    isLoading = false;
+    notifyListeners();
   }
 }
