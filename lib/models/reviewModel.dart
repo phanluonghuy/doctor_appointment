@@ -1,3 +1,5 @@
+import 'package:doctor_appointment/models/ratingModel.dart';
+
 class Review {
   final String id;
   final String doctorId;
@@ -42,44 +44,3 @@ class Review {
   }
 }
 
-class Rating {
-  final String id;
-  final String patientId;
-  final int rating;
-  final String comment;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-
-  Rating({
-    required this.id,
-    required this.patientId,
-    required this.rating,
-    required this.comment,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-
-  // Factory method to parse JSON into Rating
-  factory Rating.fromJson(Map<String, dynamic> json) {
-    return Rating(
-      id: json['_id'],
-      patientId: json['patientId'],
-      rating: json['rating'],
-      comment: json['comment'],
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
-    );
-  }
-
-  // Method to convert Rating to JSON
-  Map<String, dynamic> toJson() {
-    return {
-      '_id': id,
-      'patientId': patientId,
-      'rating': rating,
-      'comment': comment,
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
-    };
-  }
-}

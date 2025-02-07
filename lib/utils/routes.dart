@@ -21,6 +21,7 @@ import '../view/doctorBooking/doctorBookingMain_screen.dart';
 import '../view/doctorBooking/paymentBooking_screen.dart';
 import '../view/doctorBooking/successBooking_screen.dart';
 import '../view/editProfile_screen.dart';
+import '../view/review_screen.dart';
 import '../view/settings_screen.dart';
 import '../view/signUp/signup_createPassword.dart';
 import '../view/welcome_screen.dart';
@@ -101,6 +102,12 @@ final GoRouter router = GoRouter(
     GoRoute(
         path: '/successBooking',
         builder: (context, state) => const SuccessBookingScreen()),
+    GoRoute(
+        path: '/review/:id',
+        builder: (context, state) {
+          final doctorId = state.pathParameters['id'] ?? "";
+          return ReviewScreen(doctorId: doctorId);
+        }),
     GoRoute(
         path: '/add-review/:id',
         builder: (context, state) {

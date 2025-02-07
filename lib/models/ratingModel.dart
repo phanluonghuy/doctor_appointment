@@ -1,6 +1,8 @@
+import 'package:doctor_appointment/models/userModel.dart';
+
 class Rating {
   final String id;
-  final String patientId;
+  final User patientId;
   final int rating;
   final String? comment;
   final DateTime createdAt;
@@ -19,7 +21,7 @@ class Rating {
   factory Rating.fromJson(Map<String, dynamic> json) {
     return Rating(
       id: json['_id'] as String,
-      patientId: json['patientId'] as String,
+      patientId: User.fromJson(json['patientId']),
       rating: json['rating'] as int,
       comment: json['comment'] as String?,
       createdAt: DateTime.parse(json['createdAt'] as String),
@@ -31,7 +33,7 @@ class Rating {
   Map<String, dynamic> toJson() {
     return {
       '_id': id,
-      'patientId': patientId,
+      'patientId': patientId.toJson(),
       'rating': rating,
       'comment': comment,
       'createdAt': createdAt.toIso8601String(),
