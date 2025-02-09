@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:doctor_appointment/res/widgets/buttons/primaryButton.dart';
 import 'package:doctor_appointment/res/widgets/profile_tab.dart';
+import 'package:doctor_appointment/utils/noti_service.dart';
 import 'package:flutter/material.dart';
 import 'package:doctor_appointment/viewModel/user_viewmodel.dart';
 import 'package:flutter_svg/svg.dart';
@@ -93,7 +94,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 thickness: 0.5,
               ),
               ProfileTab(
-                onPressed: () {},
+                onPressed: () {
+                  // print("Show Notification");
+                  // NotificationService().showNotification(
+                  //     id: 0, title: "Daily Notification", body: "Hello");
+                  // NotificationService().scheduleNotification(
+                  //     id: 0,
+                  //     title: "Scheduled Notification",
+                  //     body: DateTime.now().toString(),
+                  //     hour: 16,
+                  //     minute: 44);
+                   NotificationService().cancelAllNotification();
+                },
                 iconPath: 'assets/buttons/icons8-love.svg',
                 title: "Favourites",
               ),
@@ -170,6 +182,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   text: "Yes, Logout",
                                   onPressed: () {
                                     userViewModel.removeUser().then((value) {
+                                      context.go('/login');
+                                    }).onError((error, stackTrace) {
+                                      print(error.toString());
                                       context.go('/login');
                                     });
                                   },

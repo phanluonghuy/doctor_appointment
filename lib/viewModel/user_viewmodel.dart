@@ -1,5 +1,12 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
+import 'package:doctor_appointment/models/dosageModel.dart';
+import 'package:doctor_appointment/repository/schedule_repository.dart';
+import 'package:doctor_appointment/utils/scheduleMedicineNotifications.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../models/medicineNotificationModel.dart';
 import '../models/userModel.dart'; // Make sure you have this User model
 import '../repository/user_repository.dart';
 import '../utils/socketio.dart';
@@ -17,9 +24,10 @@ class UserViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> apiUpdateProfile(dynamic data,dynamic image, BuildContext context) async {
+  Future<void> apiUpdateProfile(
+      dynamic data, dynamic image, BuildContext context) async {
     setLoading(true);
-    _userRepository.updateProfile(data,image).then((value) async {
+    _userRepository.updateProfile(data, image).then((value) async {
       // print(value);
       if (value.acknowledgement ?? false) {
         Utils.flushBarSuccessMessage(value.description ?? "", context);
@@ -34,7 +42,7 @@ class UserViewModel with ChangeNotifier {
     });
   }
 
-  Future<void> changePassword(dynamic data,BuildContext context) async {
+  Future<void> changePassword(dynamic data, BuildContext context) async {
     setLoading(true);
     _userRepository.changePassword(data).then((value) {
       if (value.acknowledgement ?? false) {
@@ -61,7 +69,11 @@ class UserViewModel with ChangeNotifier {
   Future<bool> removeUser() async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     sp.remove("token");
-    SocketService.disconnect();
+    try {
+      SocketService.disconnect();
+    } catch (e) {
+      print('Error disconnecting socket: $e');
+    }
     _user = null; // Clear user data
     notifyListeners(); // Notify listeners after removing the user
     return true;
@@ -74,15 +86,58 @@ class UserViewModel with ChangeNotifier {
     return token;
   }
 
+  String generateHash(String input) {
+    var bytes = utf8.encode(input); // Convert input to bytes
+    var hash = sha256.convert(bytes); // Generate SHA256 hash
+    return hash.toString(); // Convert hash to string
+  }
+
   // Fetch the user profile (example with your UserRepository)
   Future<void> getUserProfile() async {
     try {
       var token = await getUserToken();
       if (token != null) {
         _userRepository.getProfile().then((value) {
+          if (value.acknowledgement == false) {
+            removeUser();
+          }
           _user = User.fromJson(value.data);
+          // print(_user?.id);
           if (_user != null) {
             SocketService.connect(_user!.id);
+
+            ScheduleRepository()
+                .getScheduleMedicines(_user!.id)
+                .then((value) async {
+              if (value.acknowledgement == true) {
+                List<MedicineNotification> medicineNotificationList = [];
+                value.data.forEach((element) {
+                  MedicineNotification dosage =
+                      MedicineNotification.fromJson(element);
+                  medicineNotificationList.add(dosage);
+                });
+
+                final SharedPreferences sp =
+                    await SharedPreferences.getInstance();
+                final String? medicineNotification =
+                    sp.getString("medicineNotification");
+
+                if (medicineNotification == null ||
+                    medicineNotification == "") {
+                  sp.setString("medicineNotification",
+                      generateHash(medicineNotificationList.toString()));
+                  scheduleMedicineNotifications(medicineNotificationList);
+                }
+                {
+                  if (generateHash(medicineNotificationList.toString()) !=
+                      medicineNotification) {
+                    sp.setString("medicineNotification",
+                        generateHash(medicineNotificationList.toString()));
+                    scheduleMedicineNotifications(medicineNotificationList);
+                  }
+                }
+              }
+            });
           }
           // print(_user?.name ?? "No name");
           notifyListeners();

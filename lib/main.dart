@@ -1,5 +1,7 @@
 import 'package:doctor_appointment/res/widgets/coloors.dart';
+import 'package:doctor_appointment/utils/noti_service.dart';
 import 'package:doctor_appointment/viewModel/NavigationProvider.dart';
+import 'package:doctor_appointment/viewModel/bookingViewDetails_viewmodel.dart';
 import 'package:doctor_appointment/viewModel/chat_viewmodel.dart';
 import 'package:doctor_appointment/viewModel/doctorBooking_viewmodel.dart';
 import 'package:doctor_appointment/viewModel/doctor_viewmodel.dart';
@@ -13,6 +15,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  NotificationService().init();
+  NotificationService().requestPermission();
   runApp(const MyApp());
 }
 
@@ -32,6 +37,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => DoctorBookingViewModel(),lazy: true),
         ChangeNotifierProvider(create: (_) => MyBookingViewModel(),lazy: true),
         ChangeNotifierProvider(create: (_) => SignUpViewModel(),lazy: true),
+        ChangeNotifierProvider(create: (_) => BookingViewDetailsViewModel(),lazy: true),
       ],
       child: WillPopScope(
         onWillPop: () async {
