@@ -95,6 +95,10 @@ class Utils {
     return DateFormat('hh:mm a').format(timestamp);
   }
 
+  static String formatDate(DateTime timestamp) {
+    return DateFormat('MM/dd/yyyy').format(timestamp);
+  }
+
   static MessageType getMessageType(String messageType) {
     switch (messageType) {
       case 'text': return MessageType.text;

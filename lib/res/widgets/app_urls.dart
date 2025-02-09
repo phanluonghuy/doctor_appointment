@@ -1,6 +1,6 @@
 class AppUrls {
-  static const socketUrl = "ws://192.168.1.22:8080";
-  static const baseUrl = "http://192.168.1.22:8080/api";
+  static const socketUrl = "ws://192.168.1.13:8080";
+  static const baseUrl = "http://192.168.1.13:8080/api";
   static const loginEndPoint = "$baseUrl/user/sign-in";
   static const registerEndPoint = "$baseUrl/user/sign-up";
   static const sendOTP = "$baseUrl/user/getOTP";
@@ -35,6 +35,8 @@ class AppUrls {
   static var getAppointmentDetails =
       (String id) => "$baseUrl/appointment/getAppointmentDetails/$id";
 
+  static const addRatingReview = "$baseUrl/rating-review/";
+  static var getRatingReviews = (String doctorId) => "$baseUrl/rating-review/doctor/$doctorId";
   static var getScheduleMedicines =
       (String patientId) => "$baseUrl/notification/user/$patientId";
 }

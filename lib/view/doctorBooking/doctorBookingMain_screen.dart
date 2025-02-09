@@ -30,6 +30,12 @@ class _DoctorMainScreenState extends State<DoctorMainScreen> {
     });
   }
 
+  void _handleReview() async {
+    final doctorViewModel = context.read<DoctorBookingViewModel>();
+    final doctorBooking = doctorViewModel.doctorBooking;
+    context.push('/review/${doctorBooking!.doctor.id}');
+  }
+
   @override
   Widget build(BuildContext context) {
     final doctorViewModel = context.watch<DoctorBookingViewModel>();
@@ -139,15 +145,18 @@ class _DoctorMainScreenState extends State<DoctorMainScreen> {
                       ),
                       Column(
                         children: [
-                          Container(
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppColors.lightPrimaryColor),
-                              child: Icon(
-                                Icons.chat,
-                                color: AppColors.primaryColor,
-                              )),
+                          InkWell(
+                            onTap: _handleReview,
+                            child: Container(
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: AppColors.lightPrimaryColor),
+                                child: Icon(
+                                  Icons.chat,
+                                  color: AppColors.primaryColor,
+                                )),
+                          ),
                           SizedBox(height: 8),
                           // TODO : Change the value to the actual number of reviews
                           Text("4,956",

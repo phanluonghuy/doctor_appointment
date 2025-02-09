@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../../models/appointmentModel.dart';
 import '../../viewModel/bookingViewDetails_viewmodel.dart';
+import '../../viewModel/myBooking_viewmodel.dart';
 import '../texts/app_text.dart';
 import 'buttons/primaryButton.dart';
 import 'buttons/whitePrimaryButton.dart';
@@ -297,7 +298,9 @@ class MyBookingCompleteCard extends StatelessWidget {
               Expanded(
                   child: PrimaryButton(
                       text: "Add Review",
-                      onPressed: () {},
+                      onPressed: () {
+                        context.push('/add-review/${appointment.doctorId}');
+                      },
                       fontSize: 16.0,
                       context: context))
             ],

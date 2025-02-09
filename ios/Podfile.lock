@@ -11,11 +11,14 @@ PODS:
   - flutter_inappwebview_ios/Core (0.0.1):
     - Flutter
     - OrderedSet (~> 6.0.3)
+  - flutter_local_notifications (0.0.1):
+    - Flutter
   - flutter_native_splash (2.4.3):
+    - Flutter
+  - flutter_timezone (0.0.1):
     - Flutter
   - fluttertoast (0.0.2):
     - Flutter
-    - Toast
   - image_picker_ios (0.0.1):
     - Flutter
   - OrderedSet (6.0.3)
@@ -28,7 +31,6 @@ PODS:
   - sqflite_darwin (0.0.4):
     - Flutter
     - FlutterMacOS
-  - Toast (4.1.1)
   - url_launcher_ios (0.0.1):
     - Flutter
 
@@ -37,7 +39,9 @@ DEPENDENCIES:
   - emoji_picker_flutter (from `.symlinks/plugins/emoji_picker_flutter/ios`)
   - Flutter (from `Flutter`)
   - flutter_inappwebview_ios (from `.symlinks/plugins/flutter_inappwebview_ios/ios`)
+  - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
+  - flutter_timezone (from `.symlinks/plugins/flutter_timezone/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
@@ -48,7 +52,6 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - OrderedSet
-    - Toast
 
 EXTERNAL SOURCES:
   audio_waveforms:
@@ -59,8 +62,12 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_inappwebview_ios:
     :path: ".symlinks/plugins/flutter_inappwebview_ios/ios"
+  flutter_local_notifications:
+    :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_native_splash:
     :path: ".symlinks/plugins/flutter_native_splash/ios"
+  flutter_timezone:
+    :path: ".symlinks/plugins/flutter_timezone/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   image_picker_ios:
@@ -79,14 +86,15 @@ SPEC CHECKSUMS:
   emoji_picker_flutter: fe2e6151c5b548e975d546e6eeb567daf0962a58
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_inappwebview_ios: 6f63631e2c62a7c350263b13fa5427aedefe81d4
+  flutter_local_notifications: df98d66e515e1ca797af436137b4459b160ad8c9
   flutter_native_splash: f71420956eb811e6d310720fee915f1d42852e7a
-  fluttertoast: e9a18c7be5413da53898f660530c56f35edfba9c
+  flutter_timezone: ac3da59ac941ff1c98a2e1f0293420e020120282
+  fluttertoast: 21eecd6935e7064cc1fcb733a4c5a428f3f24f0f
   image_picker_ios: c560581cceedb403a6ff17f2f816d7fea1421fc1
   OrderedSet: e539b66b644ff081c73a262d24ad552a69be3a94
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
-  Toast: 1f5ea13423a1e6674c4abdac5be53587ae481c4e
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
 
 PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796

@@ -3,6 +3,7 @@ import 'package:doctor_appointment/repository/mybooking_repository.dart';
 import 'package:doctor_appointment/viewModel/user_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/utils.dart';
@@ -11,21 +12,47 @@ class MyBookingViewModel with ChangeNotifier {
   final MyBookingRepository _myBookingRepository = MyBookingRepository();
   final List<Appointment> _appointments = [];
   bool _loading = false;
+  Map<String, dynamic> _filters = {};
 
   bool get loading => _loading;
   List<Appointment> get appointments => _appointments;
 
+  List<Appointment> get filteredAppointments {
+    List<Appointment> filteredList = _appointments;
+
+    if (_filters['sortOldest'] == true) {
+      filteredList.sort((a, b) => a.appointmentDate.compareTo(b.appointmentDate));
+    } else if (_filters['sortLatest'] == true) {
+      filteredList.sort((a, b) => b.appointmentDate.compareTo(a.appointmentDate));
+    }
+
+    if (_filters['dateRange'] != null) {
+      DateTimeRange dateRange = _filters['dateRange'];
+      filteredList = filteredList.where((appointment) {
+        return appointment.appointmentDate.isAfter(dateRange.start) &&
+            appointment.appointmentDate.isBefore(dateRange.end);
+      }).toList();
+    }
+
+    return filteredList;
+  }
+
   List<Appointment> get confirmedAppointments =>
-      _appointments.where((element) => element.status == "confirmed").toList();
+      filteredAppointments.where((element) => element.status == "confirmed").toList().reversed.toList();
   List<Appointment> get pendingAppointments =>
-      _appointments.where((element) => element.status == "pending").toList();
+      filteredAppointments.where((element) => element.status == "pending").toList().reversed.toList();
   List<Appointment> get completedAppointments =>
-      _appointments.where((element) => element.status == "completed").toList();
+      filteredAppointments.where((element) => element.status == "completed").toList().reversed.toList();
   List<Appointment> get cancelledAppointments =>
-      _appointments.where((element) => element.status == "cancelled").toList();
+      filteredAppointments.where((element) => element.status == "cancelled").toList().reversed.toList();
 
   void setLoading(bool value) {
     _loading = value;
+    notifyListeners();
+  }
+
+  void setFilters(Map<String, dynamic> filters) {
+    _filters = filters;
     notifyListeners();
   }
 
@@ -45,8 +72,8 @@ class MyBookingViewModel with ChangeNotifier {
       setLoading(false);
     }).onError((error, stackTrace) {
       Utils.flushBarErrorMessage(error.toString(), context, isBottom: false);
-      print(error);
       setLoading(false);
     });
   }
 }
+

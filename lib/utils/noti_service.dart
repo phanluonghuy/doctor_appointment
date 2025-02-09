@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
@@ -19,11 +21,7 @@ class NotificationService {
 
     final androidSettings =
         AndroidInitializationSettings('@mipmap/launcher_icon');
-    final iosSettings = DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-    );
+    final iosSettings = DarwinInitializationSettings();
 
     final settings =
         InitializationSettings(android: androidSettings, iOS: iosSettings);
@@ -33,12 +31,29 @@ class NotificationService {
   }
 
   Future<void> requestPermission() async {
-    final androidImplementation =
-        notificationPlugin.resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>();
-    if (androidImplementation != null) {
-      await androidImplementation.requestNotificationsPermission();
-      await androidImplementation.requestExactAlarmsPermission();
+    if (Platform.isAndroid) {
+      final androidImplementation =
+      notificationPlugin.resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>();
+      if (androidImplementation != null) {
+        await androidImplementation.requestNotificationsPermission();
+        await androidImplementation.requestExactAlarmsPermission();
+      }
+    }
+
+    if (Platform.isIOS) {
+      final iosImplementation =
+      notificationPlugin.resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin>();
+      if (iosImplementation != null) {
+        await iosImplementation.requestPermissions(
+          alert: true,
+          badge: true,
+          sound: true,
+          critical: true,
+          provisional: true
+        );
+      }
     }
   }
 
