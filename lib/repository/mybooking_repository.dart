@@ -13,4 +13,16 @@ class MyBookingRepository {
        rethrow; //Big Brain
      }
    }
+
+   Future<ApiResponse> updateCompletedStatus(
+       String appointmentId, dynamic data) async {
+     try {
+       final response = await _network.getPatchApiResponse(
+           AppUrls.updateCompletedStatus(appointmentId), data,
+           isTokenRequired: false);
+       return response;
+     } catch (e) {
+       rethrow; //Big Brain
+     }
+   }
 }

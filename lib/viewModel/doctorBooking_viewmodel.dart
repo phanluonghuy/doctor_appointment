@@ -92,6 +92,26 @@ class DoctorBookingViewModel with ChangeNotifier {
       setQueue(false);
     });
   }
+
+  Future<void> getPayLater(String id, BuildContext context) async {
+    setQueue(true);
+    _doctorRepository.getAppointmentById(id).then((value) {
+      setQueue(false);
+      if (value.acknowledgement == true) {
+        Appointment appointment = Appointment.fromJson(value.data);
+        _bookingNumber = appointment.queueNumber;
+        _bookingId = appointment.id;
+        context.push('/paymentBooking');
+        return;
+      }
+
+      setQueue(false);
+    }).onError((error, stackTrace) {
+      print(error);
+      setQueue(false);
+    });
+  }
+
   Future<void> createPayment(BuildContext context) async {
     setQueue(true);
     Map<String,dynamic> data = {

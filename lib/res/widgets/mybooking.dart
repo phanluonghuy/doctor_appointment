@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../../models/appointmentModel.dart';
 import '../../viewModel/bookingViewDetails_viewmodel.dart';
+import '../../viewModel/doctorBooking_viewmodel.dart';
 import '../../viewModel/myBooking_viewmodel.dart';
 import '../texts/app_text.dart';
 import 'buttons/primaryButton.dart';
@@ -21,6 +22,8 @@ class MyBookingConfirmCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final MyBookingViewModel myBookingViewModel =
+    context.read<MyBookingViewModel>();
     return Container(
       padding: const EdgeInsets.all(8.0),
       margin: const EdgeInsets.only(bottom: 10),
@@ -94,14 +97,42 @@ class MyBookingConfirmCard extends StatelessWidget {
                       text: "Cancel",
                       textStyle: TextStyle(
                           fontSize: 16.0, color: AppColors.primaryColor),
-                      onPressed: () {
-
-                      })),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("Cancel Appointment"),
+                            content: Text("Are you sure you want to cancel this appointment?"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text("No"),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  Map<String, String> data = {"status": "cancelled"};
+                                  myBookingViewModel.updateStatus(
+                                      context, appointment.id, data);
+                                },
+                                child: Text("Yes", style: TextStyle(color: Colors.red)),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  )),
               SizedBox(width: 8),
               Expanded(
                   child: PrimaryButton(
                       text: "Reschedule",
-                      onPressed: () {},
+                      onPressed: () {
+                        context.push('/doctorMain/${appointment.doctorId}');
+                      },
                       fontSize: 16.0,
                       context: context))
             ],
@@ -119,6 +150,9 @@ class MyBookingPendingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final MyBookingViewModel myBookingViewModel =
+    context.read<MyBookingViewModel>();
+    final doctorViewModel = context.read<DoctorBookingViewModel>();
     return Container(
       padding: const EdgeInsets.all(8.0),
       margin: const EdgeInsets.only(bottom: 10),
@@ -192,12 +226,43 @@ class MyBookingPendingCard extends StatelessWidget {
                       text: "Cancel",
                       textStyle: TextStyle(
                           fontSize: 16.0, color: AppColors.primaryColor),
-                      onPressed: () {})),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("Cancel Appointment"),
+                            content: Text("Are you sure you want to cancel this appointment?"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text("No"),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  Map<String, String> data = {"status": "cancelled"};
+                                  myBookingViewModel.updateStatus(
+                                      context, appointment.id, data);
+                                },
+                                child: Text("Yes", style: TextStyle(color: Colors.red)),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  )),
               SizedBox(width: 8),
               Expanded(
                   child: PrimaryButton(
                       text: "Pay",
-                      onPressed: () {},
+                      onPressed: () {
+                        context.read<DoctorBookingViewModel>().getDoctorById(appointment.doctorId, context);
+                        doctorViewModel.getPayLater(appointment.id, context);
+                      },
                       fontSize: 16.0,
                       context: context))
             ],

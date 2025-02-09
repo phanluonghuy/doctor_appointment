@@ -39,6 +39,14 @@ class AppUrls {
   static var getRatingReviews = (String doctorId) => "$baseUrl/rating-review/doctor/$doctorId";
   static var getScheduleMedicines =
       (String patientId) => "$baseUrl/notification/user/$patientId";
+
+  static var updateCompletedStatus =
+      (String appointmentId) => "$baseUrl/appointment/$appointmentId/status";
+
+
+  static var getAppointmentById =
+      (String id) => "$baseUrl/appointment/$id";
+
 }
 
 //testerpayment@test.com

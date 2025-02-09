@@ -22,6 +22,18 @@ class ExploreScreen extends StatefulWidget {
 
 class _ExploreScreenState extends State<ExploreScreen> {
   TextEditingController searchController = TextEditingController();
+  bool _isSearching = false;
+
+  void _toggleSearch() {
+    final doctorViewModel = context.read<DoctorViewModel>();
+    setState(() {
+      _isSearching = !_isSearching;
+      if (!_isSearching) {
+        searchController.clear();
+        doctorViewModel.updateSearchQuery('');
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -38,12 +50,41 @@ class _ExploreScreenState extends State<ExploreScreen> {
     final width = MediaQuery.of(context).size.width;
     final doctorViewModel = context.watch<DoctorViewModel>();
 
+    // Handle search query change
+    void onSearchChanged(String query) {
+      doctorViewModel.updateSearchQuery(query);
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Top Specialist"),
         automaticallyImplyLeading: false,
         actions: [
-          Container(
+          _isSearching
+              ? Container(
+            width: 250,
+            height: 40,
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Colors.grey),
+            ),
+            child: TextField(
+              controller: searchController,
+              autofocus: true,
+              decoration: InputDecoration(
+                hintText: "Search...",
+                border: InputBorder.none,
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.close, color: Colors.grey),
+                  onPressed: _toggleSearch,
+                ),
+              ),
+              onChanged: onSearchChanged,
+            ),
+          )
+              : Container(
             height: 40,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -51,7 +92,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
               shape: BoxShape.circle,
             ),
             child: IconButton(
-              onPressed: () {},
+              onPressed: _toggleSearch,
               icon: Icon(Icons.search),
             ),
           ),
@@ -65,64 +106,70 @@ class _ExploreScreenState extends State<ExploreScreen> {
             SizedBox(
               height: 40,
               child: ListView.builder(
-                  itemCount: doctorViewModel.categories.length,
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    final category = doctorViewModel.categories[index];
-                    final isSelected =
-                        doctorViewModel.selectedCategories.contains(category);
-                    return Center(
-                      child: InkWell(
-                        onTap: () {
-                          doctorViewModel.toggleCategory(category);
-                        },
-                        splashColor: Colors.transparent,
-                        child: Container(
-                            padding: const EdgeInsets.all(8),
-                            margin: const EdgeInsets.symmetric(horizontal: 4),
-                            decoration: BoxDecoration(
-                                color: isSelected
-                                    ? AppColors.primaryColor
-                                    : Colors.white,
-                                border: Border.all(color: Colors.grey.shade400),
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Text(
-                              '  $category  ',
-                              style: AppTextStyle.caption.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color:
-                                      isSelected ? Colors.white : Colors.black),
-                            )),
+                itemCount: doctorViewModel.categories.length,
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  final category = doctorViewModel.categories[index];
+                  final isSelected =
+                  doctorViewModel.selectedCategories.contains(category);
+                  return Center(
+                    child: InkWell(
+                      onTap: () {
+                        doctorViewModel.toggleCategory(category);
+                      },
+                      splashColor: Colors.transparent,
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        margin: const EdgeInsets.symmetric(horizontal: 4),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? AppColors.primaryColor
+                              : Colors.white,
+                          border: Border.all(color: Colors.grey.shade400),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          '  $category  ',
+                          style: AppTextStyle.caption.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: isSelected ? Colors.white : Colors.black,
+                          ),
+                        ),
                       ),
-                    );
-                  }),
+                    ),
+                  );
+                },
+              ),
             ),
-            SizedBox(
-              height: height * 0.02,
-            ),
+            SizedBox(height: height * 0.02),
             if (doctorViewModel.loading)
               CircularProgressIndicator()
+            else if (doctorViewModel.topDoctors.isEmpty)
+              Center(child: Text("No doctors found"))
             else
               ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: doctorViewModel.doctors.length,
+                itemCount: doctorViewModel.topDoctors.length,
                 itemBuilder: (context, index) {
-                  final doctor = doctorViewModel.doctors[index];
+                  final doctor = doctorViewModel.topDoctors[index];
                   return DoctorCard(
-                      height: height,
-                      width: width,
-                      doctor: doctor,
-                      onMakeAppointment: () {
-                        context.push('/doctorMain/${doctor.id}');
-                      });
+                    height: height,
+                    width: width,
+                    doctor: doctor,
+                    onMakeAppointment: () {
+                      context.push('/doctorMain/${doctor.id}');
+                    },
+                  );
                 },
               ),
-            SizedBox(height: 100)
+            SizedBox(height: 100),
           ],
         ),
       ),
     );
   }
 }
+
+

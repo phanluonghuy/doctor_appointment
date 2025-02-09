@@ -190,4 +190,60 @@ class NetworkApiServices extends BaseApiServices {
       throw InternetException("NO Internet is available right now");
     }
   }
+
+  @override
+  Future getPatchApiResponse(String url, dynamic data,
+      {bool isTokenRequired = false}) async {
+    Map<String, String> headers = {'Content-Type': 'application/json'};
+
+    // Include token if required
+    if (isTokenRequired) {
+      final SharedPreferences sp = await SharedPreferences.getInstance();
+      final String? token = sp.getString("token");
+      if (token == null || token.isEmpty) {
+        throw Exception("Token is not available");
+      }
+      headers['Authorization'] = 'Bearer $token';
+    }
+    try {
+      // Send PATCH request with headers and encoded data
+      final response = await http
+          .patch(
+        Uri.parse(url),
+        body: jsonEncode(data),
+        headers: headers,
+      )
+          .timeout(const Duration(seconds: 10));
+
+      // Parse response JSON
+      final jsonResponse = jsonDecode(response.body);
+
+      // Handle successful response
+      if (response.statusCode == 200) {
+        if (jsonResponse['acknowledgement'] == true) {
+          return ApiResponse.completed(
+            acknowledgement: jsonResponse['acknowledgement'],
+            message: jsonResponse['message'],
+            description: jsonResponse['description'],
+            data: jsonResponse['data'],
+          );
+        } else {
+          return ApiResponse.error(
+            message: jsonResponse['message'],
+            description: jsonResponse['description'],
+          );
+        }
+      } else {
+        // Handle HTTP errors
+        return ApiResponse.error(
+          message: "HTTP Error: ${response.statusCode}",
+          description: response.reasonPhrase ?? "Unknown error",
+        );
+      }
+    } on SocketException {
+      throw InternetException("No internet connection is available right now");
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
 }

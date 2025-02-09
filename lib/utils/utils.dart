@@ -50,7 +50,8 @@ class Utils {
     );
   }
 
-  static void flushBarSuccessMessage(String message, BuildContext context) {
+  static void flushBarSuccessMessage(String message, BuildContext context,
+      {bool isBottom = true}) {
     showFlushbar(
       context: context,
       flushbar: Flushbar(
@@ -60,8 +61,9 @@ class Utils {
         message: message,
         duration: const Duration(seconds: 3),
         borderRadius: BorderRadius.circular(8),
-        flushbarPosition: FlushbarPosition.BOTTOM,
-        backgroundColor: Colors.green, // Success color
+        flushbarPosition:  (isBottom) ? FlushbarPosition.BOTTOM : FlushbarPosition.TOP,
+        backgroundColor: Colors.green,
+        // Success color
         reverseAnimationCurve: Curves.easeInOut,
         positionOffset: 20,
         icon: const Icon(

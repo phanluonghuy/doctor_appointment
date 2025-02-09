@@ -72,6 +72,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         const Icon(Icons.search, color: AppColors.primaryColor),
                     padding: const WidgetStatePropertyAll<EdgeInsets>(
                         EdgeInsets.symmetric(horizontal: 16.0)),
+                    onTap: () {
+                      Provider.of<NavigationProvider>(context, listen: false)
+                          .setIndex(1);
+                      context.go('/navigationMenu');
+                    },
                   ),
                 ),
                 SizedBox(width: width * 0.02),
@@ -104,7 +109,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const Spacer(),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    final doctorViewModel = context.read<DoctorViewModel>();
+                    doctorViewModel.toggleCategory("All");
+                    Provider.of<NavigationProvider>(context, listen: false)
+                        .setIndex(2);
+                    context.go('/navigationMenu');
+                  },
                   child: Text('View all', style: AppTextStyle.link),
                 ),
               ],
@@ -143,7 +154,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const Spacer(),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Provider.of<NavigationProvider>(context, listen: false)
+                        .setIndex(1);
+                    context.go('/navigationMenu');
+                  },
                   child: Text('View all', style: AppTextStyle.link),
                 ),
               ],
@@ -154,33 +169,43 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemCount: CategoryList.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
-                    return Container(
-                        padding: const EdgeInsets.all(8),
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 60,
-                              width: 60,
-                              decoration: BoxDecoration(
-                                  color: AppColors.primarySwatch,
-                                  shape: BoxShape.circle),
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  CategoryList.values.elementAt(index),
-                                  height: 30,
-                                  width: 30,
-                                  color: Colors.white,
+                    return GestureDetector(
+                      onTap: () {
+                        final doctorViewModel = context.read<DoctorViewModel>();
+                        doctorViewModel.toggleCategory("All");
+                        doctorViewModel.toggleCategory(CategoryList.keys.elementAt(index));
+                        Provider.of<NavigationProvider>(context, listen: false)
+                            .setIndex(1);
+                        context.go('/navigationMenu');
+                      },
+                      child: Container(
+                          padding: const EdgeInsets.all(8),
+                          child: Column(
+                            children: [
+                              Container(
+                                height: 60,
+                                width: 60,
+                                decoration: BoxDecoration(
+                                    color: AppColors.primarySwatch,
+                                    shape: BoxShape.circle),
+                                child: Center(
+                                  child: SvgPicture.asset(
+                                    CategoryList.values.elementAt(index),
+                                    height: 30,
+                                    width: 30,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              CategoryList.keys.elementAt(index),
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
-                            )
-                          ],
-                        ));
+                              SizedBox(height: 8),
+                              Text(
+                                CategoryList.keys.elementAt(index),
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
+                              )
+                            ],
+                          )),
+                    );
                   }),
             ),
             Row(
@@ -192,6 +217,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 const Spacer(),
                 TextButton(
                   onPressed: () {
+                    final doctorViewModel = context.read<DoctorViewModel>();
+                    doctorViewModel.toggleCategory("All");
                     Provider.of<NavigationProvider>(context, listen: false)
                         .setIndex(1);
                   },
