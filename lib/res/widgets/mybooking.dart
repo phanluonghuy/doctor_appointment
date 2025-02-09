@@ -93,7 +93,9 @@ class MyBookingConfirmCard extends StatelessWidget {
                       text: "Cancel",
                       textStyle: TextStyle(
                           fontSize: 16.0, color: AppColors.primaryColor),
-                      onPressed: () {})),
+                      onPressed: () {
+
+                      })),
               SizedBox(width: 8),
               Expanded(
                   child: PrimaryButton(
