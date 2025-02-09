@@ -65,18 +65,22 @@ class _HomeScreenState extends State<HomeScreen> {
             Row(
               children: [
                 Expanded(
-                  child: SearchBar(
-                    controller: searchController,
-                    hintText: 'Search for doctors',
-                    leading:
-                        const Icon(Icons.search, color: AppColors.primaryColor),
-                    padding: const WidgetStatePropertyAll<EdgeInsets>(
-                        EdgeInsets.symmetric(horizontal: 16.0)),
+                  child: GestureDetector(
                     onTap: () {
                       Provider.of<NavigationProvider>(context, listen: false)
                           .setIndex(1);
                       context.go('/navigationMenu');
                     },
+                    child: SearchBar(
+                      controller: searchController,
+                      autoFocus: false,
+                      enabled: false,
+                      hintText: 'Search for doctors',
+                      leading:
+                          const Icon(Icons.search, color: AppColors.primaryColor),
+                      padding: const WidgetStatePropertyAll<EdgeInsets>(
+                          EdgeInsets.symmetric(horizontal: 16.0)),
+                    ),
                   ),
                 ),
                 SizedBox(width: width * 0.02),
