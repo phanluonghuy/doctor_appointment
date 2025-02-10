@@ -58,6 +58,8 @@ class DoctorViewModel extends ChangeNotifier {
         Utils.flushBarErrorMessage(value.description ?? "", context);
         return;
       }
+
+      doctors.clear();
       value.data.forEach((doctor) {
         doctors.add(Doctor.fromJson(doctor));
       });
