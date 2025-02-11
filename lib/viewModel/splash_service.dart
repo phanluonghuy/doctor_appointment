@@ -9,12 +9,9 @@ import '../repository/schedule_repository.dart';
 
 class SplashService {
   static Future<void> checkAuthentication(BuildContext context) async {
-    context.go('/navigationMenu');
     final userViewModel = Provider.of<UserViewModel>(context, listen: false);
     await userViewModel.getUserProfile();
-    final String? token = await userViewModel.getUserToken();
-
-    if (token == null || token == "") {
+    if (userViewModel.user == null) {
       context.go('/welcome');
     } else {
       context.go('/navigationMenu');
