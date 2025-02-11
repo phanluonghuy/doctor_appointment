@@ -95,16 +95,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               ProfileTab(
                 onPressed: () {
-                  // print("Show Notification");
-                  // NotificationService().showNotification(
-                  //     id: 0, title: "Daily Notification", body: "Hello");
+                  print("Show Notification");
+                  NotificationService().showNotification(
+                      id: 0, title: "Daily Notification", body: "Hello");
                   // NotificationService().scheduleNotification(
                   //     id: 0,
                   //     title: "Scheduled Notification",
                   //     body: DateTime.now().toString(),
                   //     hour: 16,
                   //     minute: 44);
-                   NotificationService().cancelAllNotification();
+                  //  NotificationService().cancelAllNotification();
                 },
                 iconPath: 'assets/buttons/icons8-love.svg',
                 title: "Favourites",

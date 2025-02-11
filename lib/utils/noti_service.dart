@@ -12,12 +12,12 @@ class NotificationService {
 
   Future<void> init() async {
     if (_initialized) return;
-    // tz.initializeTimeZones();
-    // tz.setLocalLocation(tz.getLocation('Asia/Ho_Chi_Minh'));
-
-    final String currentTimeZone = await FlutterTimezone.getLocalTimezone();
     tz.initializeTimeZones();
-    tz.setLocalLocation(tz.getLocation(currentTimeZone));
+    tz.setLocalLocation(tz.getLocation('Asia/Ho_Chi_Minh'));
+
+    // final String currentTimeZone = await FlutterTimezone.getLocalTimezone();
+    // tz.initializeTimeZones();
+    // tz.setLocalLocation(tz.getLocation(currentTimeZone));
 
     final androidSettings =
         AndroidInitializationSettings('@mipmap/launcher_icon');
