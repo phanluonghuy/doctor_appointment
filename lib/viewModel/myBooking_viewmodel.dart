@@ -87,6 +87,7 @@ class MyBookingViewModel with ChangeNotifier {
         setLoading(false);
         return;
       }
+      _appointments.clear();
       value.data.forEach((appointment) {
         _appointments.add(Appointment.fromJson(appointment));
       });

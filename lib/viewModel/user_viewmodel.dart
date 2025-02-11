@@ -97,7 +97,7 @@ class UserViewModel with ChangeNotifier {
     try {
       var token = await getUserToken();
       if (token != null) {
-        _userRepository.getProfile().then((value) {
+        await _userRepository.getProfile().then((value) {
           if (value.acknowledgement == false) {
             removeUser();
           }
