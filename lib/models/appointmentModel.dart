@@ -5,7 +5,7 @@ class Appointment {
   final String patientId;
   final String doctorId;
   final DateTime appointmentDate;
-  final String status; // "pending", "confirmed", "completed", "cancelled"
+  String status; // "pending", "confirmed", "completed", "cancelled"
   final String symptoms;
   final String? notes; // Notes are optional
   final int queueNumber;

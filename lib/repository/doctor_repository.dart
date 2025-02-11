@@ -38,6 +38,15 @@ class DoctorRepository {
     }
   }
 
+  Future<ApiResponse> getAppointmentById(String id) async {
+    try {
+      final response = await _network.getGetApiResponse(AppUrls.getAppointmentById(id), false);
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<ApiResponse> createPayment(dynamic data) async {
     try {
       final response = await _network.getPostApiResponse(

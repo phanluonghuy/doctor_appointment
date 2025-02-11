@@ -12,18 +12,22 @@ class MyBookingViewModel with ChangeNotifier {
   final MyBookingRepository _myBookingRepository = MyBookingRepository();
   final List<Appointment> _appointments = [];
   bool _loading = false;
+  bool _isQuerying = false;
   Map<String, dynamic> _filters = {};
 
   bool get loading => _loading;
+  bool get isQuerying => _isQuerying;
   List<Appointment> get appointments => _appointments;
 
   List<Appointment> get filteredAppointments {
     List<Appointment> filteredList = _appointments;
 
     if (_filters['sortOldest'] == true) {
-      filteredList.sort((a, b) => a.appointmentDate.compareTo(b.appointmentDate));
+      filteredList
+          .sort((a, b) => a.appointmentDate.compareTo(b.appointmentDate));
     } else if (_filters['sortLatest'] == true) {
-      filteredList.sort((a, b) => b.appointmentDate.compareTo(a.appointmentDate));
+      filteredList
+          .sort((a, b) => b.appointmentDate.compareTo(a.appointmentDate));
     }
 
     if (_filters['dateRange'] != null) {
@@ -37,14 +41,26 @@ class MyBookingViewModel with ChangeNotifier {
     return filteredList;
   }
 
-  List<Appointment> get confirmedAppointments =>
-      filteredAppointments.where((element) => element.status == "confirmed").toList().reversed.toList();
-  List<Appointment> get pendingAppointments =>
-      filteredAppointments.where((element) => element.status == "pending").toList().reversed.toList();
-  List<Appointment> get completedAppointments =>
-      filteredAppointments.where((element) => element.status == "completed").toList().reversed.toList();
-  List<Appointment> get cancelledAppointments =>
-      filteredAppointments.where((element) => element.status == "cancelled").toList().reversed.toList();
+  List<Appointment> get confirmedAppointments => filteredAppointments
+      .where((element) => element.status == "confirmed")
+      .toList()
+      .reversed
+      .toList();
+  List<Appointment> get pendingAppointments => filteredAppointments
+      .where((element) => element.status == "pending")
+      .toList()
+      .reversed
+      .toList();
+  List<Appointment> get completedAppointments => filteredAppointments
+      .where((element) => element.status == "completed")
+      .toList()
+      .reversed
+      .toList();
+  List<Appointment> get cancelledAppointments => filteredAppointments
+      .where((element) => element.status == "cancelled")
+      .toList()
+      .reversed
+      .toList();
 
   void setLoading(bool value) {
     _loading = value;
@@ -53,6 +69,11 @@ class MyBookingViewModel with ChangeNotifier {
 
   void setFilters(Map<String, dynamic> filters) {
     _filters = filters;
+    notifyListeners();
+  }
+
+  void setQuerying(bool value) {
+    _isQuerying = value;
     notifyListeners();
   }
 
@@ -75,5 +96,35 @@ class MyBookingViewModel with ChangeNotifier {
       setLoading(false);
     });
   }
-}
 
+  Future<void> updateStatus(
+      BuildContext context, String appointmentId, dynamic status) async {
+    setQuerying(true);
+    _myBookingRepository
+        .updateCompletedStatus(appointmentId, status)
+        .then((value) {
+      if (value.acknowledgement == false) {
+        Utils.flushBarErrorMessage(value.description ?? "", context);
+        setQuerying(false);
+        return;
+      }
+      _appointments
+          .firstWhere((element) => element.id == appointmentId)
+          .status = value.data['status'];
+
+      if (value.data['status'] == "completed") {
+        Utils.flushBarSuccessMessage(value.message ?? "", context,
+            isBottom: false);
+      } else {
+        Utils.flushBarErrorMessage(value.message ?? "", context,
+            isBottom: false);
+      }
+
+      setQuerying(false);
+    }).onError((error, stackTrace) {
+      Utils.flushBarErrorMessage(error.toString(), context, isBottom: false);
+      print(error);
+      setQuerying(false);
+    });
+  }
+}

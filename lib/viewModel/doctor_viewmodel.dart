@@ -19,6 +19,7 @@ class DoctorViewModel extends ChangeNotifier {
   List<String> categories = CategoryList.keys.toList();
   List<String> selectedCategories = ["All"];
   bool _loading = false;
+  String searchQuery = '';
 
   List<Doctor> get getDoctors => doctors;
   bool get loading => _loading;
@@ -47,7 +48,35 @@ class DoctorViewModel extends ChangeNotifier {
       selectedCategories.add("All");
     }
 
+    // Filter doctors based on category and search query
+    _filterDoctors();
+
     notifyListeners();
+  }
+
+  void updateSearchQuery(String query) {
+    searchQuery = query;
+    _filterDoctors();
+    notifyListeners();
+  }
+
+  void _filterDoctors() {
+    // Filter doctors by category and search query
+    topDoctors = doctors.where((doctor) {
+      // Filter by category
+      bool matchesCategory = selectedCategories.contains("All") ||
+          doctor.specializations.any((spec) =>
+              spec.specializations.any((s) =>
+                  selectedCategories.contains(s)));
+
+      // Filter by search query
+      bool matchesSearchQuery = doctor.name.toLowerCase().contains(searchQuery.toLowerCase()) ||
+          doctor.specializations.any((spec) =>
+              spec.specializations.any((s) =>
+                  s.toLowerCase().contains(searchQuery.toLowerCase())));
+
+      return matchesCategory && matchesSearchQuery;
+    }).toList();
   }
 
   Future<void> getAllDoctors(BuildContext context) async {
@@ -63,11 +92,13 @@ class DoctorViewModel extends ChangeNotifier {
       value.data.forEach((doctor) {
         doctors.add(Doctor.fromJson(doctor));
       });
+
+      // Filter doctors after fetching
+      _filterDoctors();
     }).onError((error, stackTrace) {
       Utils.flushBarErrorMessage(error.toString(), context, isBottom: false);
       print(error);
       setLoading(false);
     });
   }
-
 }

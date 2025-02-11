@@ -1,6 +1,9 @@
+import 'package:flutter/foundation.dart';
+
 class AppUrls {
-  static const socketUrl = "ws://192.168.1.13:8080";
-  static const baseUrl = "http://192.168.1.13:8080/api";
+  static const host = kReleaseMode ? "api.toangtv.live" : "192.168.1.13:8080";
+  static const socketUrl = "ws://$host";
+  static const baseUrl = "http://$host/api";
   static const loginEndPoint = "$baseUrl/user/sign-in";
   static const registerEndPoint = "$baseUrl/user/sign-up";
   static const sendOTP = "$baseUrl/user/getOTP";
@@ -39,6 +42,14 @@ class AppUrls {
   static var getRatingReviews = (String doctorId) => "$baseUrl/rating-review/doctor/$doctorId";
   static var getScheduleMedicines =
       (String patientId) => "$baseUrl/notification/user/$patientId";
+
+  static var updateCompletedStatus =
+      (String appointmentId) => "$baseUrl/appointment/$appointmentId/status";
+
+
+  static var getAppointmentById =
+      (String id) => "$baseUrl/appointment/$id";
+
 }
 
 //testerpayment@test.com
