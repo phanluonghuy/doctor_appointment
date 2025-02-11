@@ -2,6 +2,8 @@
 
 A mobile application built with Flutter that enables patients to schedule medical appointments, receive medication reminders, and efficiently manage their health records.
 
+![Screenshot 2025-02-11 232848](https://github.com/user-attachments/assets/9fb180e7-b621-4f43-beaa-1729b7e5b5b6)
+
 ## Features
 
 - **Appointment Scheduling**: Book doctor appointments in advance.
